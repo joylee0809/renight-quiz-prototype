@@ -73,9 +73,7 @@ h1.big{font-size:42px;line-height:1.2}
 .wheel .it.n1{color:var(--t4);font-size:24px}
 .wheel .it.on{color:var(--t1);font-size:30px}
 .wheel .bandsel{position:absolute;left:0;right:0;top:120px;height:60px;border:1.5px solid var(--blue);border-radius:16px;background:rgba(255,255,255,.04);pointer-events:none}
-.wheel .fade{position:absolute;left:0;right:0;height:110px;pointer-events:none}
-.wheel .fade.t{top:0;background:linear-gradient(var(--bg),rgba(15,15,15,0))}
-.wheel .fade.b{bottom:0;background:linear-gradient(rgba(15,15,15,0),var(--bg))}
+.wheel .list{-webkit-mask-image:linear-gradient(transparent,#000 38%,#000 62%,transparent);mask-image:linear-gradient(transparent,#000 38%,#000 62%,transparent)}
 /* charts */
 .chart{position:relative}
 .chart svg{display:block;width:100%;height:auto;overflow:visible}
@@ -239,7 +237,7 @@ function times(startH,count){return Array.from({length:count},(_,i)=>startH*60+i
 function fmt(t){const H=Math.floor(t/60)%24,m=t%60,h12=((H+11)%12)+1,mm=String(m).padStart(2,'0');if(lang==='en')return `${h12}:${mm} ${H<12?'AM':'PM'}`;const pre=H===0?'밤':H<5?'새벽':H<12?'오전':H===12?'낮':H<18?'오후':H<22?'저녁':'밤';return `${pre} ${h12}:${mm}`}
 function fmtShort(t){const H=Math.floor(t/60)%24,m=t%60,h12=((H+11)%12)+1;if(lang==='en')return `${h12}${m?':'+String(m).padStart(2,'0'):''} ${H<12?'AM':'PM'}`;const pre=H===0?'밤':H<5?'새벽':H<12?'오전':H===12?'낮':H<18?'오후':H<22?'저녁':'밤';return `${pre} ${h12}시${m?' '+m+'분':''}`}
 function dur(min){const h=Math.floor(min/60),m=min%60;return lang==='en'?`${h}${L().h}${m?' '+m+L().m:''}`:`${h}${L().h}${m?' '+m+L().m:''}`}
-function wheel(key,startH,count,defIdx){const vals=times(startH,count);if(S[key]===undefined)S[key]=vals[defIdx];return {html:`<div class="wheel"><div class="list">${vals.map((v,i)=>`<div class="it" data-i="${i}">${fmt(v)}</div>`).join('')}</div><div class="bandsel"></div><div class="fade t"></div><div class="fade b"></div></div>`,bind(){const list=app.querySelector('.wheel .list'),its=[...list.children];const idx0=Math.max(0,vals.indexOf(S[key]));const paint=()=>{const k=Math.round(list.scrollTop/60);its.forEach((e,i)=>{e.classList.toggle('on',i===k);e.classList.toggle('n1',Math.abs(i-k)===1)});S[key]=vals[Math.min(vals.length-1,Math.max(0,k))]};requestAnimationFrame(()=>{list.scrollTop=idx0*60;paint()});list.addEventListener('scroll',()=>requestAnimationFrame(paint),{passive:true});its.forEach((e,i)=>e.onclick=()=>list.scrollTo({top:i*60,behavior:'smooth'}));
+function wheel(key,startH,count,defIdx){const vals=times(startH,count);if(S[key]===undefined)S[key]=vals[defIdx];return {html:`<div class="wheel"><div class="list">${vals.map((v,i)=>`<div class="it" data-i="${i}">${fmt(v)}</div>`).join('')}</div><div class="bandsel"></div></div>`,bind(){const list=app.querySelector('.wheel .list'),its=[...list.children];const idx0=Math.max(0,vals.indexOf(S[key]));const paint=()=>{const k=Math.round(list.scrollTop/60);its.forEach((e,i)=>{e.classList.toggle('on',i===k);e.classList.toggle('n1',Math.abs(i-k)===1)});S[key]=vals[Math.min(vals.length-1,Math.max(0,k))]};requestAnimationFrame(()=>{list.scrollTop=idx0*60;paint()});list.addEventListener('scroll',()=>requestAnimationFrame(paint),{passive:true});its.forEach((e,i)=>e.onclick=()=>list.scrollTo({top:i*60,behavior:'smooth'}));
  // mouse drag for desktop
  let dn=false,sy=0,st=0;list.addEventListener('mousedown',e=>{dn=true;sy=e.clientY;st=list.scrollTop;list.style.scrollSnapType='none'});window.addEventListener('mouseup',()=>{if(!dn)return;dn=false;const k=Math.round(list.scrollTop/60);list.style.scrollSnapType='';list.scrollTo({top:k*60,behavior:'smooth'})});window.addEventListener('mousemove',e=>{if(dn)list.scrollTop=st-(e.clientY-sy)})}}}
 // curve builder (Catmull-Rom to Bezier)
