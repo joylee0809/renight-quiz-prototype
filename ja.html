@@ -801,14 +801,14 @@ function numOf(c) { return roots().filter(r => r.screen === c.screen && r.lang =
 function drawPins() {
   layer.innerHTML = ""; if (!me) return;
   const W = phone.clientWidth;
-  for (const c of roots().filter(c => c.screen === screenNow() && c.lang === langNow())) {
+  for (const c of roots().filter(c => c.screen === screenNow() && c.lang === langNow() && (!c.resolved || filter === "all" || c.id === openId))) {
     const el = document.createElement("div"); el.className = "rv-pin" + (c.resolved ? " done" : ""); el.style.left = Math.round(c.x * W) + "px"; el.style.top = Math.round(c.y) + "px"; el.style.background = who(c.author)[1]; el.textContent = numOf(c); el.title = who(c.author)[0] + ": " + c.text;
     el.onclick = ev => { ev.stopPropagation(); showPop(c.id) }; layer.appendChild(el);
   }
   if (draft) { const el = document.createElement("div"); el.className = "rv-pin"; el.style.left = Math.round(draft.x * W) + "px"; el.style.top = draft.y + "px"; el.style.background = who(me.email)[1]; el.textContent = "+"; layer.appendChild(el) }
 }
 function placePop(pop, x, y) { const W = phone.clientWidth; pop.style.left = Math.max(8, Math.min(W - pop.offsetWidth - 8, x * W + 18)) + "px"; pop.style.top = Math.max(8, y - 10) + "px" }
-function closePop() { document.querySelectorAll(".rv-pop").forEach(p => p.remove()); openId = null; if (draft) { draft = null; drawPins() } }
+function closePop() { document.querySelectorAll(".rv-pop").forEach(p => p.remove()); openId = null; draft = null; drawPins() }
 
 catcher.addEventListener("click", ev => {
   const r = phone.getBoundingClientRect(); const x = (ev.clientX - r.left) / phone.clientWidth, y = ev.clientY - r.top;
@@ -860,7 +860,7 @@ function drawList() {
   }
 }
 $("#rv-close").onclick = () => panel.classList.remove("on");
-panel.querySelectorAll(".rv-filter button[data-f]").forEach(b => b.onclick = () => { filter = b.dataset.f; panel.querySelectorAll(".rv-filter button[data-f]").forEach(x => x.classList.toggle("on", x === b)); drawList() });
+panel.querySelectorAll(".rv-filter button[data-f]").forEach(b => b.onclick = () => { filter = b.dataset.f; panel.querySelectorAll(".rv-filter button[data-f]").forEach(x => x.classList.toggle("on", x === b)); drawList(); drawPins() });
 panel.querySelectorAll(".rv-lang button").forEach(b => b.onclick = () => { lf = b.dataset.l; panel.querySelectorAll(".rv-lang button").forEach(x => x.classList.toggle("on", x === b)); drawList() });
 new MutationObserver(() => { if (openId && !all.some(c => c.id === openId && c.screen === screenNow())) { document.querySelectorAll(".rv-pop").forEach(p => p.remove()); openId = null } draft = null; drawPins() }).observe(appEl, {childList: true});
 window.addEventListener("resize", drawPins);
