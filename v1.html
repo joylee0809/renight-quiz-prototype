@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Renight | Redesign your day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F0F0F; --card:rgba(29,30,33,.5); --inner:#25262A; --line:rgba(255,255,255,.1);
+  --t1:#FAFAFA; --t2:#CFCFCF; --t3:#A5A5A5; --t4:#8F8F8F; --t5:#646464;
+  --blue:#4876EE; --lblue:#A2C4FF; --sun:#FFC982; --sun2:#FFE9C2;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#050505;height:100%}
+body{font-family:"Plus Jakarta Sans","Pretendard",system-ui,sans-serif;font-weight:500;color:var(--t1);line-height:1.333;-webkit-font-smoothing:antialiased}
+body.ko{font-family:"Pretendard","Plus Jakarta Sans",system-ui,sans-serif;word-break:keep-all}
+#phone{position:relative;max-width:440px;min-height:100dvh;margin:0 auto;background:var(--bg);overflow:hidden}
+#phone::before{content:"";position:absolute;left:50%;top:-260px;width:560px;height:420px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(72,118,238,.55),rgba(72,118,238,0));pointer-events:none}
+#phone::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.08;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.screen{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;justify-content:space-between;gap:28px;padding:56px 24px 36px;animation:in .35s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.top{display:flex;flex-direction:column;gap:24px}
+.bottom{display:flex;flex-direction:column;gap:12px;align-items:center}
+.header{display:flex;align-items:center;gap:12px;min-height:24px}
+.back{width:24px;height:24px;border:0;background:none;cursor:pointer;display:grid;place-items:center}
+.progress{flex:1;height:4px;border-radius:2px;background:var(--inner);overflow:hidden}
+.progress i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--lblue));transition:width .5s ease}
+.x{margin-left:auto}
+h1,.h1{font-weight:600;font-size:28px;line-height:1.3;background:linear-gradient(90deg,#FAFAFA,#A2C4FF);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(72,118,238,.18))}
+h1.big{font-size:42px;line-height:1.2}
+.sub{font-size:16px;color:var(--t3)}
+.body{font-size:16px;color:var(--t2)}
+.eyebrow{font-size:13px;letter-spacing:.06em;color:var(--lblue);text-transform:uppercase}
+.ko .eyebrow{text-transform:none;letter-spacing:0}
+.q{display:flex;flex-direction:column;gap:10px}
+.btn{width:100%;height:57px;border:0;border-radius:999px;background:rgba(72,118,238,.85);color:var(--t1);font:inherit;font-size:16px;cursor:pointer;transition:transform .1s,opacity .2s}
+.btn:active{transform:scale(.98)}
+.btn[disabled]{background:rgba(72,118,238,.4);color:rgba(250,250,250,.5);cursor:default}
+.link{background:none;border:0;color:var(--t3);font:inherit;font-size:14px;cursor:pointer;padding:6px}
+.link.blue{color:var(--lblue)}
+.note{font-size:14px;color:var(--t4);text-align:center}
+.left{font-size:14px;color:var(--lblue);text-align:center}
+.opts{display:flex;flex-direction:column;gap:12px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;padding:18px 18px 18px 20px;border-radius:16px;border:1px solid var(--line);background:rgba(29,30,33,.6);backdrop-filter:blur(4px);color:var(--t1);font:inherit;font-size:16px;text-align:left;cursor:pointer;transition:background .15s,border-color .15s,transform .1s}
+.opt:active{transform:scale(.99)}
+.opt span{flex:1}
+.opt .r{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--t5);flex:none;display:grid;place-items:center;transition:all .15s}
+.opt.on{border:1.5px solid var(--blue);background:rgba(72,118,238,.16)}
+.opt.on .r{background:var(--blue);border-color:var(--blue)}
+.opt.on .r::after{content:"";width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.opt.multi .r{border-radius:6px}
+.opts.locked .opt{pointer-events:none}
+.opts.locked .opt:not(.on){opacity:.45}
+.glass{border-radius:20px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(16px);padding:20px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--inner);color:var(--t2);font-size:14px;width:max-content}
+.empathy{border-radius:16px;border:1px solid rgba(162,196,255,.35);background:var(--card);padding:12px 18px;display:flex;flex-direction:column;gap:4px;animation:up .35s ease-out}
+.empathy p{font-size:15px}.empathy small{font-size:13px;color:var(--t4)}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* day band */
+.band{position:relative;display:flex;justify-content:space-between;padding-top:2px}
+.band::before{content:"";position:absolute;left:10%;right:8%;top:7px;height:2px;opacity:.7;background:linear-gradient(90deg,var(--sun),var(--sun2) 35%,var(--lblue) 70%,var(--blue))}
+.band div{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:14px;color:var(--t4)}
+.band b{width:12px;height:12px;border-radius:50%}
+/* wheel */
+.wheel{position:relative;height:300px;margin-top:8px}
+.wheel .list{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:120px 0;overscroll-behavior:contain}
+.wheel .list::-webkit-scrollbar{display:none}
+.wheel .it{height:60px;display:grid;place-items:center;scroll-snap-align:center;font-size:22px;color:var(--t5);transition:color .15s,font-size .15s;cursor:pointer;user-select:none}
+.wheel .it.n1{color:var(--t4);font-size:24px}
+.wheel .it.on{color:var(--t1);font-size:30px}
+.wheel .bandsel{position:absolute;left:0;right:0;top:120px;height:60px;border:1.5px solid var(--blue);border-radius:16px;background:rgba(255,255,255,.04);pointer-events:none}
+.wheel .list{-webkit-mask-image:linear-gradient(transparent,#000 38%,#000 62%,transparent);mask-image:linear-gradient(transparent,#000 38%,#000 62%,transparent)}
+/* charts */
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.draw{animation:draw 1.6s cubic-bezier(.45,0,.25,1) .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.fadein{opacity:0;animation:fade .5s ease 1.7s forwards}
+@keyframes fade{to{opacity:1}}
+.axis{display:flex;justify-content:space-between;font-size:13px;color:var(--t4);margin-top:6px}
+.marker{position:absolute;padding:4px 10px;border-radius:999px;background:var(--inner);font-size:13px;color:var(--t1);white-space:nowrap;transform:translate(-50%,0)}
+/* chain */
+.chain{position:relative;display:flex;flex-direction:column;gap:13px}
+.crow{display:flex;gap:14px;padding:10px 0}
+.crow i{width:10px;height:10px;border-radius:50%;flex:none;margin-top:6px}
+.crow small{display:block;font-size:14px;color:var(--t3)}.crow p{font-size:18px}
+.arrow{position:absolute;left:0;width:10px;display:flex;justify-content:center}
+/* compare */
+.cmp{display:flex;gap:16px;align-items:flex-start}
+.cmp>div{flex:1;display:flex;flex-direction:column;gap:10px}
+.barbox{height:96px;display:flex;align-items:flex-end}
+.bar{width:100%;border-radius:12px 12px 4px 4px;height:0;transition:height .9s cubic-bezier(.2,.8,.2,1)}
+.cmp p{font-size:16px}.cmp small{font-size:14px;color:var(--t3)}
+/* loading */
+.ring{position:relative;width:168px;height:168px;margin:12px auto 0}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-weight:600;font-size:40px}
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{display:flex;gap:10px;align-items:center;font-size:16px;color:var(--t5);transition:color .3s}
+.step i{width:20px;height:20px;border-radius:50%;border:1.5px dashed var(--t5);display:grid;place-items:center;transition:all .3s}
+.step.done{color:var(--t1)}
+.step.done i{border:0;background:rgba(72,118,238,.25)}
+.step.done i::after{content:"";width:8px;height:4px;border-left:2px solid var(--lblue);border-bottom:2px solid var(--lblue);transform:rotate(-45deg) translate(1px,-1px)}
+.dim{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .35s;z-index:5}
+.dim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;width:100%;max-width:440px;transform:translate(-50%,105%);transition:transform .4s cubic-bezier(.2,.8,.2,1);z-index:6;border-radius:28px 28px 0 0;border:1px solid var(--line);background:rgba(29,30,33,.92);backdrop-filter:blur(24px);padding:28px 24px 36px;display:flex;flex-direction:column;gap:16px}
+.sheet.on{transform:translate(-50%,0)}
+.sheet h3{font-size:22px;font-weight:500}
+/* inputs */
+.input{width:100%;height:57px;border-radius:16px;border:1px solid var(--line);background:rgba(29,30,33,.6);color:var(--t1);font:inherit;font-size:16px;padding:0 20px;outline:none}
+.input:focus{border-color:var(--blue)}
+.check{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--t3);cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--blue)}
+/* result */
+.rows{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
+.row:first-child{border-top:0}
+.row span{flex:1;font-size:15px;color:var(--t2)}
+.row em{font-style:normal;font-size:16px}
+.row em.blur{filter:blur(5px);user-select:none}
+.lock{width:16px;height:16px;flex:none}
+.stats{display:flex;gap:12px}
+.stats>div{flex:1;padding:16px;border-radius:16px;background:var(--inner)}
+.stats small{font-size:14px;color:var(--t3)}.stats p{font-size:30px}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--t3)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.review{font-size:16px;color:var(--t2)}
+.disc{font-size:13px;color:var(--t4);text-align:center}
+/* paywall */
+.plan{border-radius:20px;padding:20px;border:1px solid var(--line);background:rgba(29,30,33,.6);cursor:pointer;display:flex;flex-direction:column;gap:8px;transition:all .2s}
+.plan.on{border:2px solid var(--blue);background:rgba(72,118,238,.16);box-shadow:0 0 24px rgba(72,118,238,.35)}
+.plan .hd{display:flex;align-items:center;gap:8px;font-size:18px}
+.plan .hd .r{margin-left:auto;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--t5)}
+.plan.on .hd .r{background:var(--blue) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22'><path d='M6.5 11.2l3 3 6-6.4' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/22px no-repeat;border-color:var(--blue)}
+.save{padding:4px 10px;border-radius:999px;font-size:13px;background:linear-gradient(90deg,var(--blue),var(--lblue))}
+.price{display:flex;align-items:flex-end;gap:6px}.price b{font-size:40px;font-weight:500;line-height:1}.price span{color:var(--t3)}
+.strike{text-decoration:line-through;color:var(--t5)}
+.plan.small{flex-direction:row;align-items:center;padding:16px 20px}
+.plan.small .hd{flex:1;font-size:16px;color:var(--t2)}
+.benefit{display:flex;gap:10px;font-size:15px;color:var(--t2);padding:4px 0}
+.benefit i{width:20px;height:20px;border-radius:50%;background:rgba(72,118,238,.25);flex:none;display:grid;place-items:center}
+.benefit i::after{content:"";width:8px;height:4px;border-left:2px solid var(--lblue);border-bottom:2px solid var(--lblue);transform:rotate(-45deg) translate(1px,-1px)}
+.modal{position:fixed;left:50%;top:50%;width:calc(100% - 64px);max-width:376px;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:all .3s;z-index:7;border-radius:28px;border:1px solid var(--line);background:rgba(29,30,33,.95);backdrop-filter:blur(24px);padding:28px 24px 20px;display:flex;flex-direction:column;gap:14px;text-align:center}
+.modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+.num{width:28px;height:28px;border-radius:50%;background:rgba(72,118,238,.25);color:var(--lblue);display:grid;place-items:center;font-size:14px;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.row .num{flex:none}
+.celebrate .hero{display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:12px}
+.badgebox{position:relative;width:160px;height:160px;flex:none}
+.badgebox .ring{position:absolute;left:50%;top:50%;margin:0;border-radius:50%;border:1.5px solid #A2C4FF;transform:translate(-50%,-50%)}
+.badgebox .ring.o{width:156px;height:156px;opacity:.18}
+.badgebox .ring.i{width:128px;height:128px;opacity:.35;animation:breathe 2.4s ease-in-out 1s infinite}
+@keyframes breathe{50%{transform:translate(-50%,-50%) scale(1.08);opacity:.55}}
+.badge{position:absolute;left:32px;top:32px;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#A2C4FF,#4876EE);box-shadow:0 0 40px rgba(72,118,238,.6);animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.tick{stroke-dasharray:40;stroke-dashoffset:40;animation:draw .5s ease-out .45s forwards}
+.spark{position:absolute;inset:0;pointer-events:none}
+.spark i{position:absolute;left:50%;top:50%;border-radius:50%;opacity:0;animation:burst .9s ease-out calc(.35s + var(--d)) forwards}
+@keyframes burst{0%{transform:translate(-50%,-50%);opacity:0}30%{opacity:1}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y)));opacity:.8}}
+.pill.trial{color:var(--t1);background:rgba(72,118,238,.2);border:1px solid rgba(72,118,238,.5);padding:7px 14px;gap:8px}
+.pill.trial b{width:6px;height:6px;border-radius:50%;background:var(--lblue);box-shadow:0 0 8px var(--lblue)}
+.unlocked{padding:18px 20px 8px}
+.unlocked .row{padding:11px 0}
+.unlocked .row em{text-align:right}
+.unlocked .row.u{opacity:0;animation:rowin .45s ease-out forwards;animation-delay:calc(1s + var(--i)*.18s)}
+@keyframes rowin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stepper{position:relative;display:flex}
+.stepper>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.stepper p{font-size:13px;color:var(--t2)}
+.stepper .dash{position:absolute;top:13px;height:2px;width:calc(33.333% - 44px);background:repeating-linear-gradient(90deg,var(--t5) 0 4px,transparent 4px 8px)}
+.stepper .d1{left:calc(16.667% + 22px)}.stepper .d2{left:calc(50% + 22px)}
+a.btn{display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+.lang{position:absolute;top:16px;right:16px;z-index:9;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(37,38,42,.8)}
+.lang button{border:0;border-radius:999px;padding:5px 10px;background:none;color:var(--t3);font:inherit;font-size:12px;cursor:pointer}
+.lang button.on{background:var(--blue);color:#fff}
+.logo{height:23px;width:auto;display:block}
+.eq{display:flex;align-items:center;gap:4px;height:90px}
+.eq i{flex:1;border-radius:3px;background:linear-gradient(var(--lblue),var(--blue));animation:eq 1.3s ease-in-out infinite;animation-delay:calc(var(--i)*-.11s)}
+@keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+.loop{display:flex;flex-direction:column;gap:6px;padding:16px 20px}
+.lstep{display:flex;gap:12px;align-items:center;padding:8px 0;opacity:0;animation:rowin .45s ease-out forwards;animation-delay:calc(.2s + var(--i)*.15s)}
+.lstep p{font-size:16px}.lback{font-size:13px;color:var(--lblue);padding-top:4px}
+.ps{position:absolute;top:16px;left:128px;z-index:9;max-width:160px;height:28px;border-radius:999px;border:0;padding:0 10px;background:rgba(37,38,42,.8);color:var(--t2);font:inherit;font-size:12px;cursor:pointer;-webkit-appearance:none;appearance:none}
+.vt{position:absolute;top:16px;left:16px;z-index:9;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(37,38,42,.8)}
+.vt button{border:0;border-radius:999px;padding:5px 10px;background:none;color:var(--t3);font:inherit;font-size:12px;cursor:pointer}
+.vt button.on{background:var(--blue);color:#fff}
+.scl{display:flex;justify-content:space-between;font-size:13px;color:var(--t4)}.scl b{font-weight:500;color:var(--t1)}
+.scale{position:relative;height:20px}
+.scale .tr{position:absolute;left:0;right:0;top:7px;height:6px;border-radius:3px;background:rgba(255,255,255,.1)}
+.scale .fl{position:absolute;left:0;top:7px;height:6px;width:0;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--lblue));transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.scale .mk{position:absolute;left:0;top:1px;width:18px;height:18px;border-radius:50%;background:#FAFAFA;border:4px solid var(--blue);transform:translateX(-50%);transition:left .9s cubic-bezier(.2,.8,.2,1)}
+.stmt{min-height:200px;display:flex;align-items:center;font-size:22px;padding:28px}
+.two{display:flex;gap:12px;width:100%}
+.btn2{flex:1;height:57px;border-radius:999px;border:1px solid var(--line);background:rgba(37,38,42,.6);color:var(--t1);font:inherit;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .15s}
+.btn2.on{border:1.5px solid var(--blue);background:rgba(72,118,238,.25)}
+.btn2:disabled{cursor:default}.btn2:disabled:not(.on){opacity:.45}
+.mrow{display:flex;flex-direction:column;gap:6px;padding:6px 0}.mt{display:flex;justify-content:space-between;font-size:16px}.mt em{font-style:normal}
+.mb{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}.mb i{display:block;height:100%;width:0;border-radius:3px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.game{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:290px}
+.tap{width:170px;height:170px;border-radius:50%;background:var(--inner);border:1px solid var(--line);display:grid;place-items:center;text-align:center;padding:16px;color:var(--t3);font-size:16px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.tap.go{background:radial-gradient(circle,#A2C4FF,#4876EE);color:#fff;font-size:22px;box-shadow:0 0 40px rgba(72,118,238,.6)}
+.vbars{display:flex;align-items:flex-end;gap:12px;min-height:180px}
+.vbars>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;font-size:13px;color:var(--t3);text-align:center}
+.vbars i{display:block;width:100%;max-width:36px;height:0;border-radius:8px;background:linear-gradient(var(--lblue),var(--blue));transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.fadeup{animation:up .5s ease-out}
+.stars{color:#FAFAFA;font-size:18px;letter-spacing:3px}
+.timeline{display:flex;flex-direction:column;padding:10px 20px}
+.timeline .st{display:flex;gap:14px;padding:10px 0;opacity:0;animation:rowin .45s ease-out forwards;animation-delay:calc(.2s + var(--i)*.15s)}
+.timeline .st i{width:10px;height:10px;border-radius:50%;margin-top:6px;flex:none;background:var(--lblue)}
+.timeline small{display:block;font-size:14px;color:var(--lblue)}.timeline p{font-size:16px}
+.row.u{opacity:0;animation:rowin .45s ease-out forwards;animation-delay:calc(.2s + var(--i)*.12s)}
+</style>
+</head>
+<body>
+<div id="phone"><div class="vt"><button data-v="short"></button><button data-v="long"></button></div><div class="lang"><button data-l="en">EN</button><button data-l="ko">한국어</button></div><div id="app"></div></div>
+<div class="dim" id="dim"></div>
+<script>
+const I={
+en:{
+ band:["Morning","Afternoon","Evening","Night"],startTitle:"Redesign<br>your day",startSub:"Your day starts the night before. Answer 10 quick questions and see how your tomorrow could feel.",downloads:"3M+ downloads",startBtn:"Redesign my day",startNote:"2 minutes. Free. No sign-up.",
+ painQ:"Which sounds most like you?",painS:"Choose the closest one. We'll build your plan around it.",
+ pains:["I go to bed too late and never get enough sleep","I can't fall asleep, or I keep waking up at night","I sleep, but I'm still tired and foggy all day","Stress and racing thoughts keep me up","My sleep schedule is all over the place"],
+ painChip:["going to bed too late","trouble sleeping","tired all day","stress at night","an irregular schedule","better days"],none:"None of these. I just want better days",
+ ageQ:"How old are you?",ageS:"Your body's sleep needs change with age.",ages:["Under 18","18–24","25–34","35–44","45–54","55–64","65+"],
+ emp:["At 18–24, late nights feel normal. Your body still needs 7+ hours a night. About 1 in 3 U.S. adults get less than that.","At 25–34, work and life pile up. Your body still needs 7+ hours a night. About 1 in 3 U.S. adults get less than that.","At 35–44, everyone needs a piece of you. Your body still needs 7+ hours a night. About 1 in 3 U.S. adults get less than that.","At 45–54, your days are full and your nights matter more. You still need 7+ hours a night. About 1 in 3 U.S. adults get less than that.","At 55–64, you still need 7+ hours a night (7–9 hours after 60). About 1 in 3 U.S. adults get less than that.","At 65+, your body needs 7–8 hours a night. About 1 in 4 U.S. adults your age get less than that."],
+ src:"Source: U.S. CDC",cont:"Continue",
+ teenT:"Thanks for stopping by",teenB:"Renight's sleep plans are made for adults 18 and over, so we can't build one for you here.",teenN:"Good sleep still matters at every age. Talk to a parent or doctor if sleep is hard for you.",toStart:"Back to start",
+ wakeQ:"What time do you need to wake up on weekdays?",wakeS:"This is where your tomorrow starts.",
+ m1E:"What Renight does",m1T:"What if you knew your best hours before the day starts?",m1B:"Renight reads last night's sleep and forecasts your energy for the day.",m1C:"Today's energy forecast",m1R:[["Sharpest","9:40 AM"],["Slump","2:30 PM"],["Best time to sleep tonight","11:30 PM"]],left7:"7 more questions until your plan is ready",
+ snoozeQ:"How many times do you hit snooze?",snoozeS:"Your mornings say a lot about your nights.",snooze:["I wake up before my alarm","None. I get up right away","1–2 times","3 times or more","I don't use an alarm"],
+ lowQ:"When does your energy hit bottom?",lowS:"We'll use this to map your day.",lows:["Late morning (10 AM–12 PM)","Right after lunch (1–3 PM)","Mid-afternoon (3–5 PM)","In the evening","All day long"],lowShort:["11 AM","2 PM","3 PM","7 PM","all-day"],
+ meQ:"When does your day finally become yours?",meS:"No judgment. Everyone needs time for themselves.",mes:["Before 8 PM","8–10 PM","10 PM–midnight","After midnight"],
+ b1E:"Your day, right now",b1T:"Here's what your<br>day looks like",b1B:"You're not doing anything wrong. This shape is common when nights run short.",b1N:(t)=>`Your ${t} crash didn't start at ${t}. Let's look at your nights.`,b1Nall:"Your all-day fog didn't start this morning. Let's look at your nights.",lowAt:(t)=>t==="all-day"?"Low all day":`Low at ${t}`,stillUp:"Still up at midnight",axis:["7 AM","12 PM","6 PM","12 AM"],b1Btn:"Show me my nights",left4:"Almost there. 4 more questions until your plan",
+ bedQ:"What time do you usually fall asleep on weekdays?",bedS:"Your best guess is fine.",
+ fallQ:"How long does it take you to fall asleep?",fallS:"From lights out to fully asleep.",falls:["Under 10 minutes","10–20 minutes","20–40 minutes","Over 40 minutes"],fallShort:["Under 10 min","10–20 min","20–40 min","40+ min"],
+ wakesQ:"What wakes you up at night?",wakesS:"Select all that apply.",wakes:["Racing thoughts","Bathroom trips","Noise or light","Kids or pets","Nothing. I sleep through"],
+ b2E:"Your day starts the night before",b2T:(low,bed)=>`Your ${low} crash<br>started at ${bed}`,b2Tall:(bed)=>`Your all-day fog<br>started at ${bed}`,
+ c1a:(b,w)=>`Asleep ${b}, up ${w}`,c1b:(h)=>`${h} a night`,c2a:(n,a)=>`You need ${n} hours at ${a}`,c2b:(d)=>d?`${d} of sleep debt this week`:"No sleep debt, but your nights still matter",c3a:"So your energy hits bottom",c3b:(l)=>l,
+ own:"On your own",ownD:"Try to sleep earlier. Hope it sticks.",withR:"With Renight",withD:"A patented sound for tonight. Your energy forecast every morning.",left1:"One last question, then your plan",
+ moodQ:"How do you feel today?",moodS:"We'll mix tonight's sound for how you feel right now.",moods:["Relaxed","Tense","Stressed","Anxious","Excited"],
+ loadT:"Designing your tomorrow…",steps:["Reading your mornings","Mapping your energy","Measuring your sleep debt","Mixing tonight's sound"],sheetE:"Quick question while we work",sheetQ:"What time do you wake up on weekends?",weekends:["About the same as weekdays","1–2 hours later","3+ hours later"],
+ emailT:"Your plan is ready",emailS:"Where should we send it? You'll use this email to log in to the app.",emailPh:"you@email.com",optin:"Send me sleep tips and offers (optional)",seePlan:"See my plan",never:"We'll never sell your email.",
+ built:(p)=>`Built around: ${p}`,resT:"Your redesigned day is ready",fcT:"Tomorrow's energy forecast",today:"Today",tomorrow:"Tomorrow, with your plan",sharp:"Your sharpest time",slumpTo:"Your afternoon slump moves to",debt:"Sleep debt this week",fall:"Time to fall asleep",planT:"Your plan for tonight",bestSleep:"Best time to fall asleep tonight",sound:(m)=>`Your sleep sound, mixed for: ${m}`,ready:"Ready",caffeine:"Caffeine cutoff today",sleepNow:"If I sleep now vs. in 30 min",tmr:(w)=>`Tomorrow ${w}`,firstFc:"Your first energy forecast",review:(p)=>`[Real App Store review from someone who picked “${p}”]`,reviewer:"[Name], [Age]",unlock:"Unlock my plan, free for 7 days",disc:"This is an informational reflection based on your answers, not a medical assessment.",
+ payT:"Your daily energy rhythm starts with sleep",payS:"Start free. Your plan unlocks the moment you join.",yearly:"Annually",save:"SAVE 61%",perMo:"/month",billed:"$59.99 billed annually",trial:"Includes a 7-day free trial",monthly:"Monthly",moPrice:"$12.99/month",get:"What you get",benefits:["Energy forecast every morning: your sharpest and slowest hours","Sleep debt, tracked night by night","If I sleep now? Compare now, in 30 min, in 1.5 hours","30-second brain check, compared with people your age","8 patented sleep sounds, mixed for you"],tl1:["Today","Full access to your plan"],tl2:["Day 7","Trial ends. Cancel anytime before."],startTrial:"Start my free trial",noCharge:"No charge today. Prices are examples.",
+ exitT:"Leave without your plan?",exitB:"This plan is based on your answers. If you leave now, you'll have to start over.",keep:"Keep my plan",leave:"Leave anyway",
+ inT:"You're in!",feats:["Energy forecast","Sleep debt tracking","8 patented sleep sounds"],celebT:"Welcome to Renight",celebS:"Your redesigned day starts tonight.",unlockedT:"Tonight's plan is unlocked",trialOn:"Your 7-day free trial has started",savedTo:(e)=>`Your plan is saved to ${e}`,stepsShort:["Get the app","Log in","Sleep tonight"],inS:"Download Renight and log in with the same email. Your plan is waiting.",inSteps:(e)=>["Download Renight on the App Store",`Log in with ${e}`,"Open tonight's plan"],getApp:"Get Renight on the App Store",h:"h",m:"m",
+ lStartSub:"Your day starts the night before. Answer a few questions and see how your tomorrow could feel.",lStartNote:"About 4 minutes. Free. No sign-up.",
+ goalQ:"What would a better day look like?",goalS:"Select all that apply.",goals:["Sharp focus at work","Energy left after work","Waking up without dragging myself","Fewer afternoon coffees","A better mood with the people around me"],goalShort:["sharp focus at work","energy left after work","easier mornings","fewer afternoon coffees","a better mood"],
+ lm1B:(g)=>`Renight reads last night's sleep and forecasts your energy for the day. You picked ${g}, so we'll plan around your best hours.`,lm1Left:"Next up: your mornings",
+ freeQ:"On a free day with no alarm, when would you wake up?",freeS:"Your body clock shows up on days off.",frees:["Before 7 AM","7–8 AM","8–9 AM","9–10 AM","After 10 AM"],
+ clockE:"Your body clock",types:["an early bird","an in-between type","a night owl"],typeShort:["Early bird","In-between","Night owl"],clockT:(ty)=>`You're ${ty}`,clockB:(f,g)=>g?`On a free day, your body wakes up around ${f}. Your weekday alarm goes off ${g} earlier.`:`On a free day, your body wakes up around ${f}. Your alarm already fits your body clock.`,alarm:"Weekday alarm",bodyWake:"Body clock wake",gap:"Gap",clockLeft:"A few more about your mornings",
+ mornQ:"How do you feel in the first 30 minutes after waking up?",mornS:"Mornings say a lot about last night.",morns:["Ready to go","Slow, but OK","Groggy and heavy","Like I didn't sleep at all"],
+ qrE:(n)=>`Quick round ${n} of 3`,qrT:"Does this sound like you?",qrS:"Go with your first reaction.",qrs:["“I stay up late because it's the only time that's mine.”","“My phone is the last thing I see at night.”","“I'm tired all day, then wide awake at bedtime.”"],notMe:"Not me",thatsMe:"That's me",
+ lateE:"About your nights",lateT1:"You're not lazy. You're getting your time back.",lateB1:"When your day finally becomes yours at night, sleep can feel like losing that time. Renight doesn't take it away. It shows what each 30 minutes costs tomorrow.",lateT2:"Every 30 minutes at night shows up tomorrow",lateB2:"Renight shows what a later bedtime costs you the next day, before you decide.",lateHead:(w)=>`If it's 12:40 AM and you need to be up at ${w}`,sNow:"Sleep now",s30:"In 30 min",s90:"In 1.5 hours",lateLeft:"Next up: your day",
+ b1LeftL:"Next: when you need to be sharp",
+ needQ:"When do you most need to be sharp?",needS:"We'll plan your best hours around it.",needs:["Morning meetings","Afternoon deep work","Workouts after work","Evenings with family","It changes every day"],
+ gameE:"30-second brain check",gameT:"How sharp are you right now?",gameB:"Tap the circle as soon as it turns blue. 5 rounds. Renight runs this check every morning.",round:(n)=>`Round ${n} of 5`,waitBlue:"Wait for blue",tapNow:"Tap!",tooSoon:"Too soon. Wait for blue.",start:"Start",skip:"Skip",gameLeft:"Takes about 30 seconds",
+ resE:"Your brain check",resT2:(ms)=>`Your reaction time: ${ms} ms`,resB:"This number moves with how you slept. Renight checks it each morning, so you can see what last night did to today.",avg:"Average",resLeft:"Next up: your nights",
+ wkQ:"What time do you wake up on weekends?",wkS:"Sleeping in counts.",wks:["About the same as weekdays","1–2 hours later","3+ hours later","It depends on the weekend"],
+ shiftE:"Your weekends",shiftT:(h)=>`Your wake time moves ${h} every weekend`,shiftT0:"Your weekends keep the same rhythm",shiftTv:"Your wake time changes every weekend",shiftB:(a,b)=>`Up at ${a} on weekdays and around ${b} on weekends, your body has to reset every Monday morning.`,shiftB0:"Waking up at the same time on weekends keeps your body clock steady. Nice.",shiftBv:"When weekends change every week, your body clock has a hard time settling. Renight helps you keep one steady anchor.",wdWake:"Weekday wake",weWake:"Weekend wake",days:["M","T","W","T","F","S","S"],varies:"Changes",shiftLeft:"Next: your caffeine",
+ caffQ:"When's your last coffee, tea, or energy drink?",caffS:"Any drink with caffeine counts.",caffs:["Before noon","12–2 PM","2–4 PM","After 4 PM","I don't have caffeine"],
+ cafE:"Your caffeine",cafT:(c,c5)=>`Half of ${/^(8|11)\b/.test(c)?'an':'a'} ${c} coffee is still in your body at ${c5}`,cafT0:"No caffeine. One less thing to plan around",cafB:"Caffeine takes about 5 hours to drop by half. Renight gives you a caffeine cutoff each day, based on tonight's bedtime.",cafB0:"Renight still plans your light, naps, and workouts around tonight's bedtime.",cafCup:(c)=>`${c} coffee`,cafBed:(b)=>`${b} bedtime`,cafNote:"Caffeine left in your body, based on your answers.",cafLeft:"Next: how your nights shape your day",
+ b2LeftL:"Next up: your plan",
+ triedQ:"What have you tried to sleep better?",triedS:"Select all that apply.",trieds:["Melatonin or sleep aids","White noise or sleep sounds","A sleep tracker or smartwatch","No screens before bed","Going to bed earlier","Nothing yet"],triedShort:["melatonin","white noise","a sleep tracker","no screens before bed","going to bed earlier"],
+ diffE:"Why this time is different",diffT:"Trying harder didn't stick. Here's what Renight adds.",diffT0:"Starting fresh? Start with a plan.",diffB:(x)=>`You tried ${x}. Renight mixes a sound for you tonight and forecasts your energy every morning, so you can plan the day around it.`,diffB0:"Renight mixes a sound for you tonight and forecasts your energy every morning, so you can plan the day around it.",diffLeft:"A few last questions",
+ revs:[["My sleep kept getting shorter and more irregular, and I couldn't fix it on my own. I tried the 7-day trial, and for the first time in two months I fell asleep before midnight and woke up refreshed.","ju_______v, App Store Korea (translated from Korean)"],["The first two nights, I slept straight through without getting up for the bathroom, and I felt good in the morning. Before, I'd still be sleepy when I woke up and yawn all morning.","Vickyhsu0302, App Store Taiwan (translated from Chinese)"],["I was skeptical when I started. What changed most was how I wake up: clear-headed, with almost no fatigue.","eeeeeeta.k, App Store Japan (translated from Japanese)"],["I've always had trouble falling asleep. I overthink and get anxious, so it took me 30 to 40 minutes. With the meditation and the beats on, the thoughts stop and I fall asleep fast. I tried one month, and now I'm on the yearly plan.","Yesterda2, App Store Korea (translated from Korean)"],["I'm a nurse and I've worked rotating shifts for 10 years. Falling asleep was hard, and staying asleep was harder. What I like most is that it tells me when to wake up to feel most refreshed, based on when I go to bed.","나나나무무웅, App Store Korea (translated from Korean)"],["I used to feel sleepy on anything less than 8 hours. With this app, 6 or 7 hours is enough and I'm not sleepy.","1ssssssssssttt, App Store Korea (translated from Korean)"]],revE:"From people like you",revT:(p)=>`They picked “${p}” too`,revNote:"Real App Store review. Translated, meaning unchanged.",revLeft:"2 more questions until your plan",
+ nameQ:"What should we call you?",nameS:"We'll put your name on your plan.",namePh:"First name",
+ profE:"Your sleep profile",profT:(n)=>n?`${n}, here's what we found`:"Here's what we found",profB:"Built from your answers.",pClock:"Body clock",pSleep:"Weekday sleep",pDebt:"Sleep debt this week",pShift:"Weekend shift",pCaff:"Last caffeine",pBrain:"Brain check",none0:"None",profLeft:"Next: we'll build your plan",
+ snoreQ:"Has anyone told you that you snore?",snores:["Yes","No","Not sure"],
+ resTn:(n)=>`${n}, your redesigned day is ready`,
+ weekE:"Your first week",weekT:"Here's what starts tonight",weekRows:(m,w)=>[["Tonight",`A sleep sound mixed for how you feel: ${m}`],[`Tomorrow, ${w}`,"Your first energy forecast"],["Tomorrow","Your caffeine cutoff for the day"],["Every morning","A 30-second brain check"],["Day 7","Your first weekly sleep report"]],weekLeft:"Your plan is saved",seeOptions:"See my plan options",
+ vShort:"Short",vLong:"Long",b2T0:"Enough hours.<br>Now let's time them right.",plannedFor:"Planned around",snoreRow:"Snore recording tonight",on:"On",pMorn:"Mornings",psLabels:["Example answers","1 Late sleeper","2 Can't fall asleep","3 Tired all day","4 Irregular"],
+ qrE2:(k,n)=>`Quick round ${k} of ${n}`,qLeft:(n)=>n===0?"Your plan is next":n===1?"1 more question until your plan":`${n} more questions until your plan`,
+ lwhatQ:"What keeps you up at night?",lwhatS:"Select all that apply.",lwhats:["Scrolling social media","Watching shows or YouTube","Gaming","Work or study","Just enjoying the quiet"],lwhatShort:["scrolling","shows","gaming","work","quiet time"],
+ ldelayQ:"How much later than planned do you usually fall asleep?",ldelayS:"Be honest. Everyone does it.",ldelays:["Less than 30 minutes","30–60 minutes","1–2 hours","More than 2 hours"],
+ driftE:"Your bedtime drift",driftT:(p,a)=>`You planned to sleep at ${p}. You fell asleep at ${a}.`,driftB:(w,x)=>`That's ${w} a week, mostly on ${x}.`,driftB0:(w)=>`That's ${w} a week of sleep you meant to get.`,planned:"Planned",actual:"Actually asleep",lostNight:"Later each night",lostWeek:"This week",
+ wakeNQ:"How many times do you wake up at night?",wakeNS:"Count the ones you remember.",wakeNs:["I don't","Once","2–3 times","4 times or more"],wakeNShort:["no times","once","2–3 times","4+ times"],
+ awakeQ:"What do you do when you can't sleep?",awakeS:"We'll plan your night around it.",awakes:["Check the time","Scroll my phone","Lie there and wait","Get up and do something"],
+ nightE:"Your nights",nightT:(b,a)=>`You're in bed ${b}, but asleep only ${a}`,nightB:(f,w,e)=>`Falling asleep takes ${f}, and you wake up ${w}. Sleep efficiency: ${e}%.`,nightPhone:"Reaching for your phone at night is common. Renight's sound keeps playing, so you can stay in bed with your eyes closed.",inBed:"In bed",fallingAsleep:"Falling asleep",wokeUp:"Woke up",
+ soundE:"Tonight's sound",soundT:"A sound made for the moment you lie down",soundB:(f)=>`Mixed for ${f}. It plays all night at a level you barely notice. 8 patented sounds to choose from.`,soundFor:"Mixed for",soundAll:"Plays",soundAllV:"All night",focusSleep:"falling asleep",focusMind:(m)=>`a mind still on ${m}`,
+ gapE:"Your week",gapT:(d)=>`By Friday, you're ${d} short`,gapT0:"Your hours are enough. Let's look at the timing.",gapB:"Feeling groggy even after a full night is common when sleep debt builds up over the week.",gapMorn:(m)=>`You said mornings feel “${m}”.`,days5:["Mon","Tue","Wed","Thu","Fri"],
+ snoreS:"Your daily sleep report can record it.",
+ mindQ:"What's on your mind at night?",mindS:"Select all that apply.",minds:["Work","Money","Relationships","Health","Everything at once"],mindShort:["work","money","relationships","health","everything"],
+ mfreqQ:"How many nights a week do thoughts keep you up?",mfreqS:"Just a rough guess.",mfreqs:["Rarely","1–2 nights","3–4 nights","Almost every night"],mfreqShort:["rarely","1–2 nights a week","3–4 nights a week","almost every night"],
+ qss:["“Once I'm in bed, I keep going over the day.”","“My body is tired, but my mind won't stop.”"],
+ loopE:"The loop",loopT:"Thinking keeps you up, and short sleep makes the next day harder",loop1:(m)=>`${m} on your mind at night`,loop2:(f)=>`Falling asleep takes ${f}`,loop3:(s)=>`${s} of sleep`,loop4:"A harder day, and more to think about",loopBack:"Back to 1",loopB:(f)=>`This happens ${f} for you. Renight steps in at step 2, the moment you lie down.`,
+ spreadQ:"How much does your bedtime change during the week?",spreadS:"From your earliest night to your latest.",spreads:["Within 30 minutes","About 1 hour","About 2 hours","3 hours or more"],
+ sworkQ:"Do you work shifts?",sworkS:"Some jobs make a steady schedule hard.",sworks:["No","Rotating shifts","Night shifts","Sometimes late shifts"],
+ weekvE:"Your week",weekvT:(d)=>`Your bedtime moves ${d} across the week`,weekvB0:"Renight helps you keep one steady anchor, even when the rest of the week moves.",weekvB1:"Shift work makes a steady body clock hard. Renight plans each night around the shift you're on.",
+ napQ:"Do you nap during the day?",naps:["No","Sometimes","Most days"],
+ pDrift:"Bedtime drift",pEff:"Sleep efficiency",pMind:"Racing-thought nights",pSpread:"Bedtime spread",perNight:(d)=>`+${d} a night`
+},
+ko:{
+ band:["아침","오후","저녁","밤"],startTitle:"당신의 하루를<br>다시 디자인하세요",startSub:"하루는 전날 밤에 시작돼요. 질문 10개에 답하고 내일 하루가 어떻게 달라질지 확인해 보세요.",downloads:"누적 다운로드 300만+",startBtn:"내 하루 다시 디자인하기",startNote:"2분, 무료, 가입 없이",
+ painQ:"어떤 게 가장 내 얘기 같나요?",painS:"가장 가까운 하나만 골라 주세요. 이걸 중심으로 플랜을 짜 드려요.",
+ pains:["늦게 자서 잠이 늘 모자라요","누워도 잠이 안 오거나, 밤에 자꾸 깨요","자도 하루 종일 피곤하고 멍해요","스트레스와 잡생각 때문에 잠을 설쳐요","자는 시간이 매일 들쑥날쑥해요"],
+ painChip:["늦게 자는 고민","잠 못 드는 고민","하루 종일 피곤한 고민","밤의 스트레스","들쑥날쑥한 수면 시간","더 나은 하루"],none:"딱히 없어요. 그냥 더 나은 하루를 원해요",
+ ageQ:"나이가 어떻게 되세요?",ageS:"필요한 잠은 나이에 따라 달라져요.",ages:["18세 미만","18–24세","25–34세","35–44세","45–54세","55–64세","65세 이상"],
+ emp:["18–24세는 밤을 새우는 게 익숙한 나이지만, 몸은 여전히 하룻밤 7시간 이상이 필요해요. 미국 성인 3명 중 1명은 그보다 적게 자요.","25–34세는 일과 생활이 한꺼번에 몰리는 때지만, 몸은 여전히 하룻밤 7시간 이상이 필요해요. 미국 성인 3명 중 1명은 그보다 적게 자요.","35–44세는 모두가 나를 찾는 때지만, 몸은 여전히 하룻밤 7시간 이상이 필요해요. 미국 성인 3명 중 1명은 그보다 적게 자요.","45–54세는 낮이 바쁜 만큼 밤이 더 중요해져요. 여전히 하룻밤 7시간 이상이 필요해요. 미국 성인 3명 중 1명은 그보다 적게 자요.","55–64세도 하룻밤 7시간 이상이 필요해요(60세가 넘으면 7–9시간). 미국 성인 3명 중 1명은 그보다 적게 자요.","65세 이상은 하룻밤 7–8시간이 필요해요. 미국의 같은 나이대 성인 4명 중 1명은 그보다 적게 자요."],
+ src:"출처: 미국 질병통제예방센터(CDC)",cont:"계속",
+ teenT:"들러 주셔서 고마워요",teenB:"리나이트 수면 플랜은 18세 이상 성인을 위한 거라, 여기서는 플랜을 만들어 드릴 수 없어요.",teenN:"좋은 잠은 어느 나이에나 중요해요. 잠이 힘들다면 부모님이나 의사와 이야기해 보세요.",toStart:"처음으로",
+ wakeQ:"평일에 몇 시에 일어나야 하나요?",wakeS:"여기서 내일이 시작돼요.",
+ m1E:"리나이트가 하는 일",m1T:"하루가 시작되기 전에<br>가장 좋은 시간을 알 수 있다면?",m1B:"리나이트는 어젯밤 잠을 읽고 오늘 하루 에너지를 예보해 드려요.",m1C:"오늘 에너지 예보",m1R:[["가장 또렷한 시간","오전 9:40"],["처지는 시간","오후 2:30"],["오늘 밤 잠들기 좋은 시각","밤 11:30"]],left7:"플랜까지 질문 7개 남았어요",
+ snoozeQ:"알람을 몇 번이나 끄고 다시 자나요?",snoozeS:"아침을 보면 밤이 보여요.",snooze:["알람보다 먼저 깨요","안 꺼요. 바로 일어나요","1–2번","3번 이상","알람을 안 써요"],
+ lowQ:"기운이 가장 바닥나는 때는 언제예요?",lowS:"이걸로 당신의 하루를 그려 볼게요.",lows:["늦은 오전 (오전 10시–12시)","점심 먹고 바로 (오후 1–3시)","오후 중반 (오후 3–5시)","저녁에","하루 종일"],lowShort:["오전 11시","오후 2시","오후 3시","저녁 7시","하루 종일"],
+ meQ:"하루가 온전히 내 것이 되는 건 언제부터예요?",meS:"뭐라고 하지 않을게요. 누구에게나 내 시간은 필요하니까요.",mes:["저녁 8시 전","저녁 8–10시","밤 10시–자정","자정 넘어서"],
+ b1E:"지금 당신의 하루",b1T:"당신의 하루는<br>지금 이런 모양이에요",b1B:"잘못하고 있는 게 아니에요. 밤이 짧으면 흔히 나오는 모양이에요.",b1N:(t)=>`그런데 ${t}의 방전은 ${t}에 시작된 게 아니에요. 밤을 볼게요.`,b1Nall:"그런데 하루 종일 멍한 건 오늘 아침에 시작된 게 아니에요. 밤을 볼게요.",lowAt:(t)=>t==="하루 종일"?"하루 종일 바닥":`${t} 바닥`,stillUp:"자정까지 깨어 있어요",axis:["오전 7시","낮 12시","오후 6시","자정"],b1Btn:"내 밤 보기",left4:"거의 다 왔어요. 플랜까지 질문 4개 남았어요",
+ bedQ:"평일엔 보통 몇 시에 잠드나요?",bedS:"대충 짐작해도 괜찮아요.",
+ fallQ:"잠드는 데 얼마나 걸리나요?",fallS:"불을 끄고 실제로 잠들 때까지요.",falls:["10분 미만","10–20분","20–40분","40분 넘게"],fallShort:["10분 미만","10–20분","20–40분","40분 넘게"],
+ wakesQ:"밤에 무엇 때문에 깨나요?",wakesS:"해당하는 걸 모두 골라 주세요.",wakes:["꼬리에 꼬리를 무는 생각","화장실","소음이나 빛","아이나 반려동물","안 깨요. 쭉 자요"],
+ b2E:"하루는 전날 밤에 시작돼요",b2T:(low,bed)=>`${low}의 방전은<br>${bed}에 시작됐어요`,b2Tall:(bed)=>`하루 종일 멍한 건<br>${bed}에 시작됐어요`,
+ c1a:(b,w)=>`${b}에 자고 ${w}에 일어나요`,c1b:(h)=>`하룻밤 ${h}`,c2a:(n,a)=>`${a}는 ${n}시간 이상 필요해요`,c2b:(d)=>d?`이번 주 수면 빚 ${d}`:"수면 빚은 없지만 밤은 여전히 중요해요",c3a:"그래서 기운이 바닥나는 때",c3b:(l)=>l,
+ own:"혼자 할 때",ownD:"일찍 자려고 애써요. 며칠 가길 바라면서요.",withR:"리나이트와 함께",withD:"오늘 밤엔 특허받은 소리로 자고, 아침마다 에너지 예보를 받아요.",left1:"마지막 질문 하나만 남았어요",
+ moodQ:"오늘 기분은 어때요?",moodS:"지금 기분에 맞춰 오늘 밤 소리를 섞어 드릴게요.",moods:["편안해요","긴장돼요","스트레스 받아요","불안해요","설레요"],
+ loadT:"내일을 디자인하는 중…",steps:["아침 답 읽는 중","에너지 곡선 그리는 중","수면 빚 계산하는 중","오늘 밤 소리 섞는 중"],sheetE:"준비하는 동안 하나만 더요",sheetQ:"주말엔 몇 시에 일어나요?",weekends:["평일과 비슷해요","1–2시간 늦게","3시간 이상 늦게"],
+ emailT:"플랜이 준비됐어요",emailS:"어디로 보내 드릴까요? 앱에 로그인할 때도 이 이메일을 써요.",emailPh:"you@email.com",optin:"수면 팁과 혜택 받기 (선택)",seePlan:"내 플랜 보기",never:"이메일은 절대 팔지 않아요.",
+ built:(p)=>`맞춤 기준: ${p}`,resT:"다시 디자인한 하루가<br>준비됐어요",fcT:"내일 에너지 예보",today:"오늘",tomorrow:"내일, 플랜대로 하면",sharp:"가장 또렷한 시간",slumpTo:"오후에 처지는 시간이 옮겨 가요",debt:"이번 주 수면 빚",fall:"잠드는 데 걸리는 시간",planT:"오늘 밤 플랜",bestSleep:"오늘 밤 잠들기 좋은 시각",sound:(m)=>`내 수면 소리 (${m}에 맞춤)`,ready:"준비 완료",caffeine:"오늘 커피 마감 시간",sleepNow:"지금 자면? 30분 뒤에 자면?",tmr:(w)=>`내일 ${w}`,firstFc:"첫 에너지 예보",review:(p)=>`["${p}"를 고른 사람의 실제 앱스토어 리뷰]`,reviewer:"[이름], [나이]",unlock:"7일 무료로 내 플랜 열기",disc:"답을 바탕으로 정리한 참고 정보이며, 의료 평가가 아니에요.",
+ payT:"하루 에너지 리듬은<br>잠에서 시작돼요",payS:"무료로 시작하세요. 가입하는 순간 플랜이 열려요.",yearly:"연간",save:"61% 할인",perMo:"/월",billed:"연 $59.99 한 번 결제",trial:"7일 무료 체험 포함",monthly:"월간",moPrice:"월 $12.99",get:"받는 것",benefits:["매일 아침 에너지 예보: 가장 또렷한 시간과 처지는 시간","밤마다 쌓이는 수면 빚 기록","지금 자면? 지금, 30분 뒤, 1시간 30분 뒤 비교","30초 뇌 컨디션 체크, 또래 평균과 비교","특허받은 수면 소리 8가지, 나에게 맞춰 섞기"],tl1:["오늘","플랜 전체 이용"],tl2:["7일째","체험이 끝나요. 그 전에 언제든 해지할 수 있어요."],startTrial:"무료 체험 시작하기",noCharge:"오늘은 결제되지 않아요. 가격은 예시예요.",
+ exitT:"플랜 없이 나가시겠어요?",exitB:"당신의 답으로 만든 플랜이에요. 지금 나가면 처음부터 다시 해야 해요.",keep:"플랜 지키기",leave:"그래도 나가기",
+ inT:"가입 완료!",feats:["에너지 예보","수면 빚 기록","특허 수면 소리 8가지"],celebT:"리나이트에 오신 걸<br>환영해요",celebS:"다시 디자인한 하루가 오늘 밤 시작돼요.",unlockedT:"오늘 밤 플랜이 열렸어요",trialOn:"7일 무료 체험이 시작됐어요",savedTo:(e)=>`플랜은 ${e}에 저장돼 있어요`,stepsShort:["앱 받기","로그인","오늘 밤 자기"],inS:"리나이트를 받고 같은 이메일로 로그인하세요. 플랜이 기다리고 있어요.",inSteps:(e)=>["앱스토어에서 리나이트 받기",`${e}으로 로그인`,"오늘 밤 플랜 열기"],getApp:"앱스토어에서 리나이트 받기",h:"시간",m:"분",
+ lStartSub:"하루는 전날 밤에 시작돼요. 몇 가지 질문에 답하고 내일 하루가 어떻게 달라질지 확인해 보세요.",lStartNote:"약 4분, 무료, 가입 없이",
+ goalQ:"더 나은 하루는 어떤 모습인가요?",goalS:"해당하는 걸 모두 골라 주세요.",goals:["일에 또렷하게 집중하기","퇴근 뒤에도 남는 에너지","몸을 끌고 일어나지 않는 아침","오후 커피 줄이기","주변 사람에게 덜 예민한 하루"],goalShort:["일에 집중하기","퇴근 뒤 에너지","가벼운 아침","오후 커피 줄이기","더 나은 기분"],
+ lm1B:(g)=>`리나이트는 어젯밤 잠을 읽고 오늘 하루 에너지를 예보해 드려요. "${g}"를 고르셨으니 가장 좋은 시간에 맞춰 짤게요.`,lm1Left:"다음은 아침에 대해 물어볼게요",
+ freeQ:"알람 없는 날이면 몇 시에 깨나요?",freeS:"쉬는 날에 몸 시계가 보여요.",frees:["오전 7시 전","오전 7–8시","오전 8–9시","오전 9–10시","오전 10시 넘어서"],
+ clockE:"내 몸 시계",types:["아침형","중간형","저녁형"],typeShort:["아침형","중간형","저녁형"],clockT:(ty)=>`당신은 ${ty}이에요`,clockB:(f,g)=>g?`쉬는 날 몸은 ${f}쯤 깨요. 평일 알람은 그보다 ${g} 빨라요.`:`쉬는 날 몸은 ${f}쯤 깨요. 지금 알람은 몸 시계와 잘 맞아요.`,alarm:"평일 알람",bodyWake:"몸 시계 기상",gap:"차이",clockLeft:"아침에 대해 몇 가지만 더요",
+ mornQ:"일어나서 30분 동안 어떤가요?",mornS:"아침을 보면 어젯밤이 보여요.",morns:["바로 움직일 수 있어요","느리지만 괜찮아요","멍하고 무거워요","하나도 안 잔 것 같아요"],
+ qrE:(n)=>`빠른 질문 ${n}/3`,qrT:"내 얘기 같나요?",qrS:"처음 든 느낌대로 골라 주세요.",qrs:["“나만의 시간이 그때뿐이라 늦게까지 안 자요.”","“자기 전 마지막으로 보는 건 폰이에요.”","“하루 종일 피곤한데 잘 때가 되면 말똥말똥해요.”"],notMe:"아니에요",thatsMe:"내 얘기예요",
+ lateE:"당신의 밤",lateT1:"게을러서가 아니에요. 내 시간을 되찾는 중이에요.",lateB1:"하루가 밤에야 온전히 내 것이 되면, 잠은 그 시간을 잃는 것처럼 느껴져요. 리나이트는 그 시간을 뺏지 않아요. 30분마다 내일 무엇을 잃는지 보여 줄 뿐이에요.",lateT2:"밤의 30분은 내일 낮에 드러나요",lateB2:"리나이트는 늦게 자면 다음 날 무엇을 잃는지, 정하기 전에 보여 줘요.",lateHead:(w)=>`새벽 12:40인데 ${w}에 일어나야 한다면`,sNow:"지금 자면",s30:"30분 뒤에 자면",s90:"1시간 30분 뒤에 자면",lateLeft:"다음은 낮에 대해 물어볼게요",
+ b1LeftL:"다음: 가장 또렷해야 하는 때",
+ needQ:"언제 가장 또렷해야 하나요?",needS:"가장 좋은 시간을 거기에 맞춰 볼게요.",needs:["아침 회의","오후 집중 업무","퇴근 뒤 운동","저녁 가족 시간","매일 달라요"],
+ gameE:"30초 뇌 컨디션",gameT:"지금 얼마나 또렷한가요?",gameB:"원이 파랗게 바뀌면 바로 눌러 주세요. 5번 해요. 리나이트는 매일 아침 이 체크를 해요.",round:(n)=>`${n}/5회`,waitBlue:"파란색을 기다리세요",tapNow:"지금!",tooSoon:"너무 빨라요. 파란색을 기다리세요.",start:"시작",skip:"건너뛰기",gameLeft:"30초쯤 걸려요",
+ resE:"내 뇌 컨디션",resT2:(ms)=>`반응 속도 ${ms}ms`,resB:"이 숫자는 잠에 따라 바뀌어요. 리나이트는 매일 아침 이걸 재서 어젯밤이 오늘에 준 영향을 보여 줘요.",avg:"평균",resLeft:"다음은 밤에 대해 물어볼게요",
+ wkQ:"주말엔 몇 시에 일어나요?",wkS:"늦잠도 포함이에요.",wks:["평일과 비슷해요","1–2시간 늦게","3시간 이상 늦게","주마다 달라요"],
+ shiftE:"당신의 주말",shiftT:(h)=>`주말마다 기상이 ${h} 밀려요`,shiftT0:"주말에도 리듬이 그대로예요",shiftTv:"주말마다 기상이 달라져요",shiftB:(a,b)=>`평일엔 ${a}, 주말엔 ${b}쯤 일어나요. 그래서 몸은 월요일 아침마다 다시 맞춰야 해요.`,shiftB0:"주말에도 같은 시간에 일어나면 몸 시계가 흔들리지 않아요. 좋아요.",shiftBv:"주말이 매번 달라지면 몸 시계가 자리 잡기 어려워요. 리나이트는 흔들리지 않는 기준 하나를 잡아 줘요.",wdWake:"평일 기상",weWake:"주말 기상",days:["월","화","수","목","금","토","일"],varies:"매번 달라요",shiftLeft:"다음은 카페인이에요",
+ caffQ:"마지막 커피, 차, 에너지 드링크는 언제인가요?",caffS:"카페인이 든 건 다 포함이에요.",caffs:["정오 전","오후 12–2시","오후 2–4시","오후 4시 넘어서","카페인을 안 마셔요"],
+ cafE:"당신의 카페인",cafT:(c,c5)=>`${c} 커피의 절반은 ${c5}에도 몸에 남아 있어요`,cafT0:"카페인을 안 마시는군요. 신경 쓸 게 하나 줄었어요",cafB:"카페인이 절반으로 줄어드는 데 약 5시간이 걸려요. 리나이트는 오늘 밤 잘 시각에 맞춰 매일 커피 마감 시각을 알려 줘요.",cafB0:"리나이트는 오늘 밤 잘 시각에 맞춰 햇빛, 낮잠, 운동 시간도 알려 줘요.",cafCup:(c)=>`${c} 커피`,cafBed:(b)=>`${b} 취침`,cafNote:"답을 바탕으로 계산한, 몸에 남은 카페인이에요.",cafLeft:"다음: 밤이 낮을 어떻게 만드는지",
+ b2LeftL:"다음은 당신의 플랜이에요",
+ triedQ:"잘 자려고 해 본 게 있나요?",triedS:"해당하는 걸 모두 골라 주세요.",trieds:["멜라토닌이나 수면 보조제","백색소음이나 수면 소리","수면 트래커나 스마트워치","자기 전 화면 끄기","일찍 눕기","아직 없어요"],triedShort:["멜라토닌","백색소음","수면 트래커","자기 전 화면 끄기","일찍 눕기"],
+ diffE:"이번엔 뭐가 다른지",diffT:"애써 봤지만 오래 못 갔죠. 리나이트는 이걸 더해요.",diffT0:"처음이라면, 플랜부터 시작하세요.",diffB:(x)=>`해 본 것: ${x}. 리나이트는 오늘 밤 나에게 맞춘 소리를 틀어 주고, 매일 아침 에너지를 예보해 줘요. 그래서 하루를 거기에 맞춰 짤 수 있어요.`,diffB0:"리나이트는 오늘 밤 나에게 맞춘 소리를 틀어 주고, 매일 아침 에너지를 예보해 줘요. 그래서 하루를 거기에 맞춰 짤 수 있어요.",diffLeft:"마지막 질문 몇 개만 남았어요",
+ revs:[["자는 시간이 너무 줄어들고 불규칙한데 스스로 통제가 안 되던 차에 다운받았어요. 7일 체험권으로 써 봤는데 두 달 만에 12시 이전에 잠들었고 개운하게 일어났어요.","ju_______v, 한국 앱스토어"],["쓰기 시작한 이틀 동안 밤에 화장실 가려고 깨지 않고 푹 잤고, 아침에도 정신이 맑았어요. 전에는 아침에 일어나도 졸리고 계속 하품만 했어요.","Vickyhsu0302, 대만 앱스토어 (번역)"],["처음엔 반신반의하며 썼는데, 가장 크게 바뀐 건 아침에 일어날 때예요. 개운하고 피로감이 거의 없어요.","eeeeeeta.k, 일본 앱스토어 (번역)"],["평생 입면이 힘들었어요. 잡생각이 많고 불안이 높은 편이라 잠드는 데 30~40분 걸렸는데, 명상을 켜고 모노럴 비트에만 집중하면 잡생각이 안 들어서 엄청 빨리 잠들어요. 한 달 결제했다가 이제 1년 결제해서 쓰고 있어요.","Yesterda2, 한국 앱스토어"],["10년째 교대근무를 하는 간호사예요. 잠들기도 어렵고 그마저도 잘 유지가 안 됐어요. 가장 좋은 점은 이 시간에 자면 언제 일어나야 가장 개운한지 알려 주는 거예요.","나나나무무웅, 한국 앱스토어"],["원래 8시간보다 적게 자면 졸렸는데, 이 앱을 쓰니 6~7시간만 자도 안 졸려요.","1ssssssssssttt, 한국 앱스토어"]],revE:"나와 비슷한 사람들",revT:(p)=>`${p}, 나만 그런 게 아니에요`,revNote:"실제 앱스토어 후기예요. 뜻은 그대로 옮겼어요.",revLeft:"플랜까지 질문 2개 남았어요",
+ nameQ:"뭐라고 부를까요?",nameS:"플랜에 이름을 넣어 드릴게요.",namePh:"이름",
+ profE:"내 수면 프로필",profT:(n)=>n?`${n}님, 이렇게 나왔어요`:"이렇게 나왔어요",profB:"답을 바탕으로 만들었어요.",pClock:"몸 시계",pSleep:"평일 수면",pDebt:"이번 주 수면 빚",pShift:"주말 시차",pCaff:"마지막 카페인",pBrain:"뇌 컨디션",none0:"없음",profLeft:"다음: 플랜을 만들게요",
+ snoreQ:"코를 곤다는 말을 들어 본 적 있나요?",snores:["네","아니요","잘 모르겠어요"],
+ resTn:(n)=>`${n}님의 다시 디자인한 하루가<br>준비됐어요`,
+ weekE:"첫 일주일",weekT:"오늘 밤부터 시작돼요",weekRows:(m,w)=>[["오늘 밤",`지금 기분(${m})에 맞춘 수면 소리`],[`내일 ${w}`,"첫 에너지 예보"],["내일","오늘의 커피 마감 시각"],["매일 아침","30초 뇌 컨디션 체크"],["7일째","첫 주간 수면 리포트"]],weekLeft:"플랜이 저장됐어요",seeOptions:"플랜 옵션 보기",
+ vShort:"짧게",vLong:"길게",b2T0:"잠은 충분해요.<br>이제 시간을 맞출 차례예요.",plannedFor:"맞춘 시간",snoreRow:"오늘 밤 코골이 녹음",on:"켜짐",pMorn:"아침 상태",psLabels:["예시 답","1 늦게 자는 사람","2 잠 못 드는 사람","3 자도 피곤한 사람","4 들쑥날쑥한 사람"],
+ qrE2:(k,n)=>`빠른 질문 ${k}/${n}`,qLeft:(n)=>n===0?"이제 플랜이에요":`플랜까지 질문 ${n}개 남았어요`,
+ lwhatQ:"밤에 뭘 하느라 늦게 자나요?",lwhatS:"해당하는 걸 모두 골라 주세요.",lwhats:["SNS 스크롤","드라마나 유튜브","게임","일이나 공부","그냥 조용한 내 시간"],lwhatShort:["스크롤","영상 보기","게임","일","조용한 시간"],
+ ldelayQ:"계획보다 보통 얼마나 늦게 잠드나요?",ldelayS:"솔직하게요. 다들 그래요.",ldelays:["30분 안","30분~1시간","1~2시간","2시간 넘게"],
+ driftE:"계획과 실제",driftT:(p,a)=>`${p}에 자려고 했는데, ${a}에 잠들었어요`,driftB:(w,x)=>`일주일이면 모두 ${w}. 주로 “${x}”에 쓴 시간이에요.`,driftB0:(w)=>`일주일이면 모두 ${w}, 자려고 했던 잠이에요.`,planned:"계획한 시각",actual:"실제로 잠든 시각",lostNight:"매일 늦어진 시간",lostWeek:"이번 주",
+ wakeNQ:"밤에 몇 번 깨나요?",wakeNS:"기억나는 것만 세어 주세요.",wakeNs:["안 깨요","한 번","2~3번","4번 이상"],wakeNShort:["한 번도 안","한 번","2~3번","4번 이상"],
+ awakeQ:"잠이 안 오면 뭘 하나요?",awakeS:"밤 플랜에 반영할게요.",awakes:["시간 확인","폰 보기","가만히 누워 기다리기","일어나서 다른 걸 하기"],
+ nightE:"당신의 밤",nightT:(b,a)=>`침대엔 ${b} 있지만, 실제로 잔 건 ${a}`,nightB:(f,w,e)=>`잠드는 데 ${f} 걸리고, 밤에 ${w} 깨요. 수면 효율 ${e}%.`,nightPhone:"밤에 폰을 찾는 건 흔한 일이에요. 리나이트 소리는 밤새 켜져 있어서, 눈을 감은 채 누워 있으면 돼요.",inBed:"침대에 있는 시간",fallingAsleep:"잠드는 중",wokeUp:"깬 때",
+ soundE:"오늘 밤 소리",soundT:"누운 순간을 위해 만든 소리",soundB:(f)=>`“${f}”에 맞춰 섞었어요. 거의 들리지 않는 크기로 밤새 흘러요. 특허받은 소리 8가지 중에서 골라요.`,soundFor:"맞춘 것",soundAll:"재생",soundAllV:"밤새",focusSleep:"잠드는 순간",focusMind:(m)=>`${m} 생각이 많은 머리`,
+ gapE:"당신의 한 주",gapT:(d)=>`금요일이면 ${d} 모자라요`,gapT0:"잠은 충분해요. 이제 시간을 볼게요.",gapB:"주중에 수면 빚이 쌓이면, 다 잔 것 같아도 아침이 무겁기 쉬워요.",gapMorn:(m)=>`아침 상태를 “${m}”라고 답했어요.`,days5:["월","화","수","목","금"],
+ snoreS:"일간 수면 리포트에서 녹음해 드릴 수 있어요.",
+ mindQ:"밤에 무슨 생각이 많이 나나요?",mindS:"해당하는 걸 모두 골라 주세요.",minds:["일","돈","관계","건강","전부 한꺼번에"],mindShort:["일","돈","관계","건강","온갖"],
+ mfreqQ:"일주일에 며칠이나 생각 때문에 못 자나요?",mfreqS:"대충 짐작해도 괜찮아요.",mfreqs:["거의 없어요","1~2일","3~4일","거의 매일"],mfreqShort:["가끔","일주일에 1~2일","일주일에 3~4일","거의 매일"],
+ qss:["“누우면 오늘 있었던 일이 계속 떠올라요.”","“몸은 피곤한데 머리는 안 쉬어요.”"],
+ loopE:"반복되는 고리",loopT:"생각 때문에 늦게 자고, 짧게 자서 다음 날이 더 힘들어요",loop1:(m)=>`밤에 ${m} 생각`,loop2:(f)=>`잠드는 데 ${f}`,loop3:(s)=>`잠은 ${s}`,loop4:"더 힘든 하루, 더 많은 생각",loopBack:"다시 1번으로",loopB:(f)=>`이게 ${f} 반복돼요. 리나이트는 2번, 누운 순간부터 도와요.`,
+ spreadQ:"일주일 동안 잠드는 시각이 얼마나 달라지나요?",spreadS:"가장 일찍 잔 날과 가장 늦게 잔 날의 차이요.",spreads:["30분 안","1시간쯤","2시간쯤","3시간 이상"],
+ sworkQ:"교대 근무를 하나요?",sworkS:"일 때문에 일정이 고르기 어려운 경우가 있어요.",sworks:["아니요","교대 근무","야간 근무","가끔 늦은 근무"],
+ weekvE:"당신의 일주일",weekvT:(d)=>`일주일 동안 잠드는 시각이 ${d}까지 벌어져요`,weekvB0:"나머지가 흔들려도, 리나이트는 흔들리지 않는 기준 하나를 잡아 줘요.",weekvB1:"교대 근무를 하면 몸 시계를 고르게 지키기 어려워요. 리나이트는 그날 근무에 맞춰 밤을 짜요.",
+ napQ:"낮잠을 자나요?",naps:["안 자요","가끔","거의 매일"],
+ pDrift:"계획보다 늦게 잠",pEff:"수면 효율",pMind:"생각 때문에 못 자는 밤",pSpread:"잠드는 시각 차이",perNight:(d)=>`매일 +${d}`
+}};
+let lang=(new URLSearchParams(location.search).get('lang')==='ko')?'ko':'en';
+const S={};let hist=[];let cur='start';
+const LONG=new URLSearchParams(location.search).get('ver')==='long';
+const ORDER_S=['start','pain','age','wake','m1','snooze','low','me','b1','bed','fall','wakes','b2','mood','loading','email','result','paywall','download'];
+const ORDER_L=['start','pain','age','goal','m1','wake','free','clock','snooze','morn','qr1','qr2','qr3','late','low','me','b1','need','bed','fall','wakes','wk','shift','caff','cres','b2','tried','diff','rev','mood','name','prof','loading','email','result','week','paywall','download'];
+const HEAD=['start','pain','age','goal','m1','wake','free','clock','low','me','b1','need','bed','fall'];
+const TAIL=['b2','tried','diff','rev','mood','name','prof','loading','email','result','week','paywall','download'];
+const BLOCK={0:['qr1','qr2','lwhat','ldelay','late','drift','snooze','morn','caff','cres'],1:['wakes','wakeN','awake','qr3','night','snooze','morn','caff','cres','sound'],2:['morn','snooze','snore','qr2','qr3','caff','cres','wk','shift','gap'],3:['mind','mfreq','qs1','qs2','loop','wakes','morn','sound','caff','cres'],4:['wk','shift','spread','swork','weekv','snooze','morn','qr1','caff','cres'],5:['qr1','qr2','qr3','late','wakes','wk','shift','caff','cres','morn']};
+function flowL(){const p=S.pain===undefined?5:S.pain;return [...HEAD,...BLOCK[p],...TAIL]}
+const QIDS=new Set(['pain','age','goal','wake','free','snooze','morn','qr1','qr2','qr3','qs1','qs2','low','me','need','bed','fall','wakes','wk','caff','tried','mood','name','lwhat','ldelay','wakeN','awake','snore','mind','mfreq','spread','swork']);
+const STMTS={qr1:['qrs',0],qr2:['qrs',1],qr3:['qrs',2],qs1:['qss',0],qs2:['qss',1]};
+let ORDER=LONG?flowL():ORDER_S;
+const PROG={pain:.08,age:.15,wake:.23,m1:.27,snooze:.3,low:.38,me:.45,b1:.5,bed:.58,fall:.65,wakes:.72,b2:.78,mood:.85,loading:.92,email:.96};
+const app=document.getElementById('app'),dim=document.getElementById('dim');
+const L=()=>I[lang];
+const BACK='<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#CFCFCF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const X='<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#A5A5A5" stroke-width="2" stroke-linecap="round"/></svg>';
+const LOCK='<svg class="lock" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" fill="#A2C4FF"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="#A2C4FF" stroke-width="1.5"/></svg>';
+function progOf(id){if(!LONG)return PROG[id];const i=ORDER.indexOf(id),e=ORDER.indexOf('email');return i>0&&i<=e?i/e:undefined}
+function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+const UPI='<svg width="20" height="20" viewBox="0 0 24 24"><path d="M2 21h3V10H2v11zm20-9.5c0-1.1-.9-2-2-2h-6.3l.95-4.6.03-.3c0-.4-.17-.8-.44-1.06L13.2 2.5 7.6 8.1C7.2 8.5 7 9 7 9.5V19c0 1.1.9 2 2 2h8.5c.83 0 1.5-.5 1.8-1.2l2.6-6.1c.07-.2.1-.4.1-.6v-1.6z" fill="#FAFAFA"/></svg>';
+const DOWNI=UPI.replace('<path','<path transform="rotate(180 12 12)"');
+function header(id){const p=progOf(id);return `<div class="header"><button class="back" onclick="back()">${BACK}</button>${p!==undefined?`<div class="progress"><i style="width:${p*100}%"></i></div>`:''}</div>`}
+function go(id,push=true){if(push&&cur!==id)hist.push(cur);cur=id;closeOverlays();render();window.scrollTo(0,0)}
+function back(){closeOverlays();if(hist.length){cur=hist.pop();render();}}
+function closeOverlays(){dim.classList.remove('on');document.querySelectorAll('.sheet,.modal').forEach(e=>e.remove())}
+function next(id){if(LONG)ORDER=flowL();const i=ORDER.indexOf(id);go(ORDER[i+1])}
+function opts(list,key,{multi=false,onPick}={}){return `<div class="opts" data-key="${key}">${list.map((t,i)=>{const on=multi?(S[key]||[]).includes(i):S[key]===i;return `<button class="opt${multi?' multi':''}${on?' on':''}" data-i="${i}"><span>${t}</span><i class="r"></i></button>`}).join('')}</div>`}
+function bindSingle(key,after,delay=600){const box=app.querySelector(`.opts[data-key="${key}"]`);box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{S[key]=+b.dataset.i;box.querySelectorAll('.opt').forEach(o=>o.classList.toggle('on',o===b));box.classList.add('locked');setTimeout(()=>after(+b.dataset.i),delay)})}
+function bindMulti(key,none=4){const box=app.querySelector(`.opts[data-key="${key}"]`);box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{let a=S[key]||[];const i=+b.dataset.i;if(i===none)a=a.includes(none)?[]:[none];else{a=a.filter(x=>x!==none);a=a.includes(i)?a.filter(x=>x!==i):[...a,i]}S[key]=a;box.querySelectorAll('.opt').forEach(o=>o.classList.toggle('on',a.includes(+o.dataset.i)));app.querySelector('#cont').disabled=!a.length})}
+// times
+function times(startH,count){return Array.from({length:count},(_,i)=>startH*60+i*30)}
+function fmt(t){const H=Math.floor(t/60)%24,m=t%60,h12=((H+11)%12)+1,mm=String(m).padStart(2,'0');if(lang==='en')return `${h12}:${mm} ${H<12?'AM':'PM'}`;const pre=H===0?'밤':H<5?'새벽':H<12?'오전':H===12?'낮':H<18?'오후':H<22?'저녁':'밤';return `${pre} ${h12}:${mm}`}
+function fmtShort(t){const H=Math.floor(t/60)%24,m=t%60,h12=((H+11)%12)+1;if(lang==='en')return `${h12}${m?':'+String(m).padStart(2,'0'):''} ${H<12?'AM':'PM'}`;const pre=H===0?'밤':H<5?'새벽':H<12?'오전':H===12?'낮':H<18?'오후':H<22?'저녁':'밤';return `${pre} ${h12}시${m?' '+m+'분':''}`}
+function dur(min){const h=Math.floor(min/60),m=min%60;if(!h)return `${m}${L().m}`;return `${h}${L().h}${m?' '+m+L().m:''}`}
+function wheel(key,startH,count,defIdx){const vals=times(startH,count);if(S[key]===undefined)S[key]=vals[defIdx];return {html:`<div class="wheel"><div class="list">${vals.map((v,i)=>`<div class="it" data-i="${i}">${fmt(v)}</div>`).join('')}</div><div class="bandsel"></div></div>`,bind(){const list=app.querySelector('.wheel .list'),its=[...list.children];const idx0=Math.max(0,vals.indexOf(S[key]));const paint=()=>{const k=Math.round(list.scrollTop/60);its.forEach((e,i)=>{e.classList.toggle('on',i===k);e.classList.toggle('n1',Math.abs(i-k)===1)});S[key]=vals[Math.min(vals.length-1,Math.max(0,k))]};requestAnimationFrame(()=>{list.scrollTop=idx0*60;paint()});list.addEventListener('scroll',()=>requestAnimationFrame(paint),{passive:true});its.forEach((e,i)=>e.onclick=()=>list.scrollTo({top:i*60,behavior:'smooth'}));
+ // mouse drag for desktop
+ let dn=false,sy=0,st=0;list.addEventListener('mousedown',e=>{dn=true;sy=e.clientY;st=list.scrollTop;list.style.scrollSnapType='none'});window.addEventListener('mouseup',()=>{if(!dn)return;dn=false;const k=Math.round(list.scrollTop/60);list.style.scrollSnapType='';list.scrollTo({top:k*60,behavior:'smooth'})});window.addEventListener('mousemove',e=>{if(dn)list.scrollTop=st-(e.clientY-sy)})}}}
+// curve builder (Catmull-Rom to Bezier)
+function pathFrom(pts){let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=0;i<pts.length-1;i++){const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;const c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6],c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];d+=` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)},${c2[0].toFixed(1)} ${c2[1].toFixed(1)},${p2[0]} ${p2[1]}`}return d}
+const DIPX=[68,136,155,233,0];
+function todayPts(){const low=S.low??2,late=(S.me??3)>=2;let pts;if(low===4){pts=[[0,132],[60,110],[120,124],[178,112],[238,126],[290,114]]}else{const dx=DIPX[low];pts=[[0,135],[50,60]];if(dx>90)pts.push([dx-45,62]);pts.push([dx,140]);pts.push([Math.min(dx+55,295),88]);if(dx+55<240)pts.push([267,104])}
+pts.push(late?[325,78]:[325,118]);pts.push(late?[350,95]:[350,125]);return pts.sort((a,b)=>a[0]-b[0]).filter((p,i,a)=>i===0||p[0]-a[i-1][0]>8)}
+function tomorrowPts(){return [[0,90],[60,28],[110,50],[160,82],[215,58],[275,118],[350,160]]}
+function lowLabel(){return L().lowShort[S.low??2]}
+function lat(){return LONG?[5,15,30,45][S.fall??1]:0}
+function sleepMin(){const w=S.wake??420,b=S.bed??60;let d=(w-b+1440)%1440;return Math.max(0,d-lat())}
+function m24(x){return ((x%1440)+1440)%1440}
+function bestSleep(){return m24((S.wake??420)-450)}
+const PERSONAS=[{pain:0,age:2,goal:[0],wake:420,free:3,snooze:3,morn:2,qr:[1,1,1],low:1,me:3,need:1,bed:1530,fall:1,wakes:[4],weekend:2,caff:3,tried:[3,4],mood:1,name:'Alex',snore:1,email:'alex@email.com'},{pain:1,age:3,goal:[4],wake:390,free:1,snooze:1,morn:3,qr:[0,0,1],low:2,me:1,need:3,bed:1380,fall:3,wakes:[0,1],weekend:0,caff:2,tried:[0,1],mood:3,name:'Jordan',snore:2,email:'jordan@email.com'},{pain:2,age:4,goal:[1],wake:360,free:0,snooze:2,morn:2,qr:[0,1,0],low:4,me:2,need:0,bed:1410,fall:0,wakes:[3],weekend:1,caff:0,tried:[2],mood:2,name:'Sam',snore:0,email:'sam@email.com'},{pain:4,age:1,goal:[2],wake:480,free:4,snooze:4,morn:1,qr:[1,1,0],low:0,me:3,need:4,bed:1560,fall:2,wakes:[2],weekend:3,caff:4,tried:[5],mood:0,name:'Riley',snore:1,email:'riley@email.com'}];
+function needHours(){return (S.age??2)>=6?7:7}
+function debtMin(){return Math.max(0,needHours()*60-sleepMin())*5}
+function ageLabel(){const a=I.en.ages[S.age??2];return lang==='en'?a:L().ages[S.age??2]}
+function prepDraw(){app.querySelectorAll('path.draw').forEach(p=>{const L=Math.ceil(p.getTotalLength())+2;p.style.strokeDasharray=L;p.style.strokeDashoffset=L})}
+function render(){document.body.classList.toggle('ko',lang==='ko');document.documentElement.lang=lang==='ko'?'ko':'en';document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));document.querySelectorAll('.vt button').forEach(b=>{b.textContent=b.dataset.v==='long'?L().vLong:L().vShort;b.classList.toggle('on',(b.dataset.v==='long')===LONG)});const t=L();let h='';
+switch(cur){
+case 'start':h=`<div class="screen"><div class="top"><div class="header"><svg class="logo" viewBox="0 27 340 69" role="img" aria-label="Renight" xmlns="http://www.w3.org/2000/svg" fill="#FAFAFA"><path d="M0.0237123 49.077C0.552823 60.418 10.6564 69.7957 22.1429 69.6111C29.183 69.4982 35.3694 66.1064 39.2623 60.9455C40.2843 59.5912 38.9302 57.7389 37.3071 58.2701C36.5309 58.524 35.7979 58.7325 35.2456 58.8294C34.8428 58.9 34.4381 58.9632 34.031 59.0128C33.8102 59.0392 33.5925 59.0576 33.3736 59.0791C32.9502 59.1183 32.5261 59.1545 32.0996 59.1723C31.9895 59.1766 31.8794 59.1785 31.7693 59.1821C31.2433 59.1969 30.7154 59.1969 30.1869 59.1778C30.0074 59.1711 29.8304 59.1613 29.6415 59.1551C29.3319 59.1447 29.0236 59.114 28.7165 59.0742C28.5557 59.0533 28.3944 59.0527 28.2336 59.0343C15.7783 57.6144 8.20343 47.3952 9.92658 35.3911C9.94097 35.2875 9.96286 35.1856 9.97787 35.082C10.0554 34.5655 10.1505 34.0675 10.2556 33.5946C10.6177 31.9692 8.67256 30.8063 7.40788 31.9048C2.61813 36.0646 -0.29463 42.2614 0.0237123 49.077Z"/><ellipse cx="69.8574" cy="51.284" rx="19.8083" ry="19.8086"/><path d="M119.18 79.2834V42.4577H126.531V49.8773L125.85 48.7882C126.667 46.3831 127.983 44.6587 129.798 43.6149C131.614 42.5258 133.792 41.9812 136.333 41.9812H138.579V48.9924H135.38C132.839 48.9924 130.774 49.7866 129.186 51.3749C127.643 52.9178 126.871 55.1414 126.871 58.0457V79.2834H119.18ZM159.77 80.1003C156.094 80.1003 152.827 79.2608 149.968 77.5817C147.154 75.8573 144.953 73.5429 143.365 70.6386C141.777 67.6889 140.983 64.3989 140.983 60.7685C140.983 57.0473 141.777 53.7573 143.365 50.8984C144.999 48.0395 147.177 45.7932 149.9 44.1595C152.623 42.4804 155.708 41.6409 159.157 41.6409C161.925 41.6409 164.399 42.1174 166.577 43.0704C168.755 44.0233 170.593 45.3394 172.091 47.0184C173.588 48.6521 174.723 50.5353 175.494 52.6682C176.311 54.801 176.719 57.07 176.719 59.4752C176.719 60.0651 176.697 60.6777 176.651 61.313C176.606 61.9484 176.515 62.5383 176.379 63.0829H147.041V56.9566H172.022L168.347 59.7474C168.8 57.5238 168.642 55.5498 167.87 53.8254C167.144 52.0556 166.01 50.6715 164.467 49.6731C162.969 48.6294 161.199 48.1075 159.157 48.1075C157.115 48.1075 155.3 48.6294 153.712 49.6731C152.123 50.6715 150.898 52.1236 150.036 54.0296C149.174 55.8902 148.833 58.1591 149.015 60.8366C148.788 63.3324 149.128 65.5107 150.036 67.3712C150.989 69.2318 152.305 70.684 153.984 71.7277C155.708 72.7714 157.66 73.2933 159.838 73.2933C162.062 73.2933 163.945 72.7941 165.488 71.7958C167.076 70.7974 168.324 69.5041 169.232 67.9158L175.494 70.9789C174.768 72.7034 173.633 74.269 172.091 75.6758C170.593 77.0371 168.778 78.1263 166.645 78.9431C164.557 79.7146 162.266 80.1003 159.77 80.1003ZM182.865 79.2834V42.4577H190.216V49.6731L189.331 48.7201C190.239 46.4058 191.691 44.6587 193.688 43.4788C195.684 42.2535 197.999 41.6409 200.631 41.6409C203.354 41.6409 205.759 42.2308 207.846 43.4107C209.934 44.5906 211.567 46.2243 212.747 48.3117C213.927 50.3992 214.517 52.8043 214.517 55.5271V79.2834H206.893V57.5692C206.893 55.7086 206.553 54.143 205.872 52.8724C205.192 51.5564 204.216 50.558 202.945 49.8773C201.72 49.1513 200.313 48.7882 198.725 48.7882C197.137 48.7882 195.707 49.1513 194.437 49.8773C193.211 50.558 192.258 51.5564 191.578 52.8724C190.897 54.1884 190.557 55.754 190.557 57.5692V79.2834H182.865ZM221.388 79.2834V42.4577H229.08V79.2834H221.388ZM221.388 37.4206V28.5715H229.08V37.4206H221.388ZM254.478 94.2588C251.8 94.2588 249.327 93.8277 247.058 92.9655C244.789 92.1032 242.838 90.9007 241.204 89.3578C239.57 87.8602 238.345 86.0904 237.528 84.0483L244.608 81.1213C245.243 82.8458 246.4 84.2752 248.079 85.4097C249.804 86.5442 251.914 87.1115 254.41 87.1115C256.361 87.1115 258.108 86.7257 259.651 85.9543C261.194 85.2282 262.419 84.1391 263.327 82.6869C264.234 81.2802 264.688 79.5784 264.688 77.5817V69.2772L266.05 70.8428C264.779 73.2026 263.009 74.9951 260.74 76.2203C258.517 77.4456 255.998 78.0582 253.184 78.0582C249.781 78.0582 246.718 77.264 243.995 75.6758C241.272 74.0875 239.117 71.9092 237.528 69.1411C235.985 66.3729 235.214 63.2644 235.214 59.8155C235.214 56.3213 235.985 53.2128 237.528 50.49C239.117 47.7672 241.25 45.6116 243.927 44.0233C246.604 42.435 249.667 41.6409 253.116 41.6409C255.93 41.6409 258.426 42.2535 260.604 43.4788C262.828 44.6587 264.643 46.3831 266.05 48.6521L265.029 50.558V42.4577H272.312V77.5817C272.312 80.7583 271.541 83.5945 269.998 86.0904C268.5 88.6317 266.413 90.6284 263.735 92.0806C261.058 93.5327 257.972 94.2588 254.478 94.2588ZM254.069 70.9109C256.111 70.9109 257.927 70.4344 259.515 69.4814C261.103 68.4831 262.351 67.167 263.259 65.5334C264.212 63.8543 264.688 61.9711 264.688 59.8836C264.688 57.7961 264.212 55.9128 263.259 54.2338C262.306 52.5547 261.035 51.2387 259.447 50.2858C257.859 49.2874 256.066 48.7882 254.069 48.7882C251.982 48.7882 250.121 49.2874 248.488 50.2858C246.854 51.2387 245.561 52.5547 244.608 54.2338C243.7 55.8675 243.246 57.7507 243.246 59.8836C243.246 61.9257 243.7 63.7862 244.608 65.4653C245.561 67.1443 246.854 68.4831 248.488 69.4814C250.121 70.4344 251.982 70.9109 254.069 70.9109ZM279.954 79.2834V27.7547H287.646V49.6731L286.421 48.7201C287.329 46.4058 288.781 44.6587 290.777 43.4788C292.774 42.2535 295.089 41.6409 297.721 41.6409C300.443 41.6409 302.849 42.2308 304.936 43.4107C307.023 44.5906 308.657 46.2243 309.837 48.3117C311.017 50.3992 311.607 52.7816 311.607 55.459V79.2834H303.983V57.5692C303.983 55.7086 303.62 54.143 302.894 52.8724C302.213 51.5564 301.26 50.558 300.035 49.8773C298.81 49.1513 297.403 48.7882 295.815 48.7882C294.272 48.7882 292.865 49.1513 291.594 49.8773C290.369 50.558 289.393 51.5564 288.667 52.8724C287.987 54.1884 287.646 55.754 287.646 57.5692V79.2834H279.954ZM334.406 79.6919C330.549 79.6919 327.554 78.6028 325.421 76.4245C323.288 74.2463 322.221 71.1832 322.221 67.2351V49.4008H315.755V42.4577H316.776C318.5 42.4577 319.839 41.9586 320.792 40.9602C321.745 39.9618 322.221 38.6005 322.221 36.876V34.0171H329.913V42.4577H338.286V49.4008H329.913V66.8948C329.913 68.1654 330.118 69.2545 330.526 70.1621C330.934 71.0243 331.592 71.705 332.5 72.2042C333.408 72.658 334.587 72.8849 336.04 72.8849C336.403 72.8849 336.811 72.8622 337.265 72.8168C337.719 72.7714 338.15 72.7261 338.558 72.6807V79.2834C337.923 79.3742 337.219 79.465 336.448 79.5557C335.677 79.6465 334.996 79.6919 334.406 79.6919Z"/></svg></div></div>
+<div class="glass" style="display:flex;flex-direction:column;gap:20px;padding:32px 28px"><div class="band">${t.band.map((b,i)=>`<div><b style="background:${['#FFC982','#FFE9C2','#A2C4FF','#4876EE'][i]};${i===0?'box-shadow:0 0 12px rgba(255,201,130,.6)':''}"></b>${b}</div>`).join('')}</div><h1 class="big">${t.startTitle}</h1><p class="body" style="font-size:18px">${LONG?t.lStartSub:t.startSub}</p><div class="chips">${t.feats.map(f=>`<span class="pill">${f}</span>`).join('')}</div></div>
+<div class="bottom"><button class="btn" onclick="next('start')">${t.startBtn}</button><p class="note">${LONG?t.lStartNote:t.startNote}</p></div></div>`;break;
+case 'pain':h=`<div class="screen"><div class="top">${header('pain')}<div class="q"><h1>${t.painQ}</h1><p class="sub">${t.painS}</p></div>${opts(t.pains,'pain')}</div><div class="bottom"><button class="link" id="none">${t.none}</button></div></div>`;break;
+case 'age':h=`<div class="screen"><div class="top">${header('age')}<div class="q"><h1>${t.ageQ}</h1><p class="sub">${t.ageS}</p></div><div style="display:flex;flex-direction:column;gap:12px">${opts(t.ages,'age')}<div id="emp"></div></div></div><div class="bottom"><button class="btn" id="cont" style="visibility:hidden" onclick="next('age')">${t.cont}</button></div></div>`;break;
+case 'teen':h=`<div class="screen"><div class="top"><div class="header"></div><div class="q" style="padding-top:140px;gap:16px"><h1 style="font-size:32px">${t.teenT}</h1><p class="body" style="font-size:18px">${t.teenB}</p><p class="sub">${t.teenN}</p></div></div><div class="bottom"><button class="link blue" onclick="restart()">${t.toStart}</button></div></div>`;break;
+case 'wake':{const w=wheel('wake',4,17,6);h=`<div class="screen"><div class="top">${header('wake')}<div class="q"><h1>${t.wakeQ}</h1><p class="sub">${t.wakeS}</p></div>${w.html}</div><div class="bottom"><button class="btn" onclick="next('wake')">${t.cont}</button></div></div>`;app.innerHTML=h;w.bind();return}
+case 'm1':h=`<div class="screen"><div class="top">${header('m1')}<div class="q"><p class="eyebrow">${t.m1E}</p><h1>${t.m1T}</h1><p class="body">${LONG?t.lm1B(goalText()):t.m1B}</p></div><div class="glass" style="padding:20px 20px 10px"><div style="display:flex;gap:8px;align-items:center;padding-bottom:8px"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" fill="#FFC982"/><path d="M10 1.5v2.2M10 16.3v2.2M1.5 10h2.2M16.3 10h2.2M4 4l1.5 1.5M14.5 14.5L16 16M4 16l1.5-1.5M14.5 5.5L16 4" stroke="#FFC982" stroke-width="1.5" stroke-linecap="round"/></svg>${t.m1C}</div><div class="rows">${t.m1R.map((r,i)=>`<div class="row"><i style="width:8px;height:8px;border-radius:50%;background:${['#FFC982','#A2C4FF','#4876EE'][i]}"></i><span>${r[0]}</span><em style="font-size:18px">${r[1]}</em></div>`).join('')}</div></div></div><div class="bottom"><p class="left">${LONG?leftText('m1'):t.left7}</p><button class="btn" onclick="next('m1')">${t.cont}</button></div></div>`;break;
+case 'snooze':h=`<div class="screen"><div class="top">${header('snooze')}<div class="q"><h1>${t.snoozeQ}</h1><p class="sub">${t.snoozeS}</p></div>${opts(t.snooze,'snooze')}</div><div></div></div>`;break;
+case 'low':h=`<div class="screen"><div class="top">${header('low')}<div class="q"><h1>${t.lowQ}</h1><p class="sub">${t.lowS}</p></div>${opts(t.lows,'low')}</div><div></div></div>`;break;
+case 'me':h=`<div class="screen"><div class="top">${header('me')}<div class="q"><h1>${t.meQ}</h1><p class="sub">${t.meS}</p></div>${opts(t.mes,'me')}</div><div></div></div>`;break;
+case 'b1':{const pts=todayPts(),d=pathFrom(pts),low=S.low??2,dip=low===4?null:pts.find(p=>p[1]===140),late=(S.me??3)>=2;
+h=`<div class="screen"><div class="top">${header('b1')}<div class="q"><p class="eyebrow">${t.b1E}</p><h1>${t.b1T}</h1></div>
+<div class="glass" id="b1c"><div class="chart"><svg viewBox="0 -10 350 190"><defs><linearGradient id="s" x1="0" x2="350" gradientUnits="userSpaceOnUse"><stop stop-color="#FFC982"/><stop offset=".5" stop-color="#A2C4FF"/><stop offset="1" stop-color="#4876EE"/></linearGradient><linearGradient id="a" x1="0" y1="20" x2="0" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><path class="fadein" d="${d} L350 180 L0 180Z" fill="url(#a)"/><path class="draw" id="curve" d="${d}" stroke="url(#s)" stroke-width="3" fill="none" stroke-linecap="round"/>${dip?`<circle class="fadein" cx="${dip[0]}" cy="${dip[1]}" r="6" fill="#A2C4FF"/>`:''}${late?`<circle class="fadein" cx="325" cy="78" r="6" fill="#4876EE"/>`:''}</svg>
+${dip?`<span class="marker fadein" style="left:${dip[0]/350*100}%;top:${(dip[1]+22)/190*100}%">${t.lowAt(lowLabel())}</span>`:`<span class="marker fadein" style="left:50%;top:80%">${t.lowAt(lowLabel())}</span>`}${late?`<span class="marker fadein" style="left:78%;top:12%">${t.stillUp}</span>`:''}</div><div class="axis">${t.axis.map(a=>`<span>${a}</span>`).join('')}</div></div>
+<p class="body">${t.b1B}</p><p style="font-size:18px">${low===4?t.b1Nall:t.b1N(lowLabel())}</p></div><div class="bottom"><p class="left">${LONG?leftText('b1'):t.left4}</p><button class="btn" onclick="next('b1')">${t.b1Btn}</button></div></div>`;
+app.innerHTML=h;prepDraw();return}
+case 'bed':{const w=wheel('bed',20,17,10);h=`<div class="screen"><div class="top">${header('bed')}<div class="q"><h1>${t.bedQ}</h1><p class="sub">${t.bedS}</p></div>${w.html}</div><div class="bottom"><button class="btn" onclick="next('bed')">${t.cont}</button></div></div>`;app.innerHTML=h;w.bind();return}
+case 'fall':h=`<div class="screen"><div class="top">${header('fall')}<div class="q"><h1>${t.fallQ}</h1><p class="sub">${t.fallS}</p></div>${opts(t.falls,'fall')}</div><div></div></div>`;break;
+case 'wakes':h=`<div class="screen"><div class="top">${header('wakes')}<div class="q"><h1>${t.wakesQ}</h1><p class="sub">${t.wakesS}</p></div>${opts(t.wakes,'wakes',{multi:true})}</div><div class="bottom"><button class="btn" id="cont" ${(S.wakes||[]).length?'':'disabled'} onclick="next('wakes')">${t.cont}</button></div></div>`;break;
+case 'b2':{const low=S.low??2,asl=m24((S.bed??60)+lat()),bedS=fmtShort(asl),debt=debtMin(),title=LONG&&debt===0?t.b2T0:low===4?t.b2Tall(bedS):t.b2T(lowLabel(),bedS);
+h=`<div class="screen"><div class="top">${header('b2')}<div class="q"><p class="eyebrow">${t.b2E}</p><h1>${title}</h1></div>
+<div class="glass"><div class="chain" id="chain">
+<div class="crow"><i style="background:#4876EE"></i><div><small>${t.c1a(fmt(asl),fmt(S.wake??420))}</small><p>${t.c1b(dur(sleepMin()))}</p></div></div>
+<div class="crow"><i style="background:#A2C4FF"></i><div><small>${t.c2a(needHours(),ageLabel())}</small><p>${t.c2b(debt>0?dur(debt):'')}</p></div></div>
+<div class="crow"><i style="background:#FFC982"></i><div><small>${t.c3a}</small><p>${t.lows[low]}</p></div></div></div></div>
+${LONG?'':CMP(t)}<div class="glass cmp" style="display:none"><div><div class="barbox"><div class="bar" style="background:var(--inner)" data-h="36"></div></div><p>${t.own}</p><small>${t.ownD}</small></div><div><div class="barbox"><div class="bar" style="background:linear-gradient(#A2C4FF,#4876EE)" data-h="96"></div></div><p>${t.withR}</p><small>${t.withD}</small></div></div></div>
+<div class="bottom"><p class="left">${LONG?leftText('b2'):t.left1}</p><button class="btn" onclick="next('b2')">${t.cont}</button></div></div>`;
+app.innerHTML=h;const ch=app.querySelector('#chain'),dots=[...ch.querySelectorAll('.crow i')];requestAnimationFrame(()=>{const cb=ch.getBoundingClientRect();for(let k=0;k<dots.length-1;k++){const a=dots[k].getBoundingClientRect(),b=dots[k+1].getBoundingClientRect();const y0=a.bottom-cb.top+6,y1=b.top-cb.top-6;const ar=document.createElement('div');ar.className='arrow';ar.style.top=y0+'px';ar.style.height=(y1-y0)+'px';ar.innerHTML=`<svg width="12" height="${y1-y0}" viewBox="0 0 12 ${y1-y0}" fill="none"><path d="M6 1V${y1-y0-1}M2.5 ${y1-y0-4.5}L6 ${y1-y0-1}L9.5 ${y1-y0-4.5}" stroke="#8F8F8F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;ch.appendChild(ar)}app.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h+'px')});return}
+case 'goal':h=`<div class="screen"><div class="top">${header('goal')}<div class="q"><h1>${t.goalQ}</h1><p class="sub">${t.goalS}</p></div>${opts(t.goals,'goal',{multi:true})}</div><div class="bottom"><button class="btn" id="cont" ${(S.goal||[]).length?'':'disabled'} onclick="next('goal')">${t.cont}</button></div></div>`;break;
+case 'free':h=`<div class="screen"><div class="top">${header('free')}<div class="q"><h1>${t.freeQ}</h1><p class="sub">${t.freeS}</p></div>${opts(t.frees,'free')}</div><div></div></div>`;break;
+case 'clock':{const c=clockInfo();
+h=`<div class="screen"><div class="top">${header('clock')}<div class="q"><p class="eyebrow">${t.clockE}</p><h1>${t.clockT(t.types[c.ty])}</h1><p class="body">${t.clockB(fmt(c.fw),c.g>0?dur(c.g):0)}</p></div>
+<div class="glass" style="display:flex;flex-direction:column;gap:10px"><div class="scl">${t.typeShort.map((x,i)=>i===c.ty?`<b>${x}</b>`:`<span>${x}</span>`).join('')}</div><div class="scale"><i class="tr"></i><i class="fl" data-w="${c.pos*100}"></i><i class="mk" data-l="${c.pos*100}"></i></div>
+<div class="rows" style="border-top:1px solid rgba(255,255,255,.08);margin-top:6px"><div class="row"><span>${t.alarm}</span><em>${fmt(S.wake??420)}</em></div><div class="row"><span>${t.bodyWake}</span><em>${fmt(c.fw)}</em></div><div class="row"><span>${t.gap}</span><em style="color:var(--lblue)">${c.g>0?dur(c.g):'0'}</em></div></div></div></div>
+<div class="bottom"><p class="left">${leftText('clock')}</p><button class="btn" onclick="next('clock')">${t.cont}</button></div></div>`;
+app.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>{const f=app.querySelector('.scale .fl'),m=app.querySelector('.scale .mk');f.style.width=f.dataset.w+'%';m.style.left=m.dataset.l+'%'}));return}
+case 'morn':h=`<div class="screen"><div class="top">${header('morn')}<div class="q"><h1>${t.mornQ}</h1><p class="sub">${t.mornS}</p></div>${opts(t.morns,'morn')}</div><div></div></div>`;break;
+case 'qr1':case 'qr2':case 'qr3':case 'qs1':case 'qs2':{const id=cur,sts=ORDER.filter(x=>STMTS[x]),k=sts.indexOf(id)+1,nn=sts.length,v=S['st_'+id],st=t[STMTS[id][0]][STMTS[id][1]];
+h=`<div class="screen"><div class="top">${header(id)}<div class="q"><p class="eyebrow">${t.qrE2(k,nn)}</p><h1>${t.qrT}</h1><p class="sub">${t.qrS}</p></div><div class="glass stmt">${st}</div></div><div class="bottom"><div class="two"><button class="btn2${v===0?' on':''}" data-v="0">${DOWNI}${t.notMe}</button><button class="btn2${v===1?' on':''}" data-v="1">${UPI}${t.thatsMe}</button></div></div></div>`;
+app.innerHTML=h;const bs=[...app.querySelectorAll('.btn2')];bs.forEach(b=>b.onclick=()=>{S['st_'+id]=+b.dataset.v;bs.forEach(x=>{x.classList.toggle('on',x===b);x.disabled=true});setTimeout(()=>{if(cur===id)next(id)},500)});return}
+case 'late':{const yes=S.st_qr1===1||S.st_qr2===1,w=S.wake??420,d0=(w-40+1440)%1440,need=needHours()*60;
+const rr=[[t.sNow,d0,1],[t.s30,d0-30,0],[t.s90,d0-90,0]];
+h=`<div class="screen"><div class="top">${header('late')}<div class="q"><p class="eyebrow">${t.lateE}</p><h1>${yes?t.lateT1:t.lateT2}</h1><p class="body">${yes?t.lateB1:t.lateB2}</p></div>
+<div class="glass" style="display:flex;flex-direction:column;gap:8px"><small style="color:var(--t3);font-size:14px">${t.lateHead(fmt(w))}</small>${rr.map(([a,m,hi])=>`<div class="mrow"><div class="mt"><span style="color:${hi?'var(--t1)':'var(--t2)'}">${a}</span><em>${dur(Math.max(0,m))}</em></div><div class="mb"><i data-w="${Math.min(100,Math.max(0,m)/need*100)}" style="background:${hi?'linear-gradient(90deg,var(--blue),var(--lblue))':'rgba(143,143,143,.6)'}"></i></div></div>`).join('')}</div></div>
+<div class="bottom"><p class="left">${leftText('late')}</p><button class="btn" onclick="next('late')">${t.cont}</button></div></div>`;
+app.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.mb i').forEach(i=>i.style.width=i.dataset.w+'%')));return}
+case 'need':h=`<div class="screen"><div class="top">${header('need')}<div class="q"><h1>${t.needQ}</h1><p class="sub">${t.needS}</p></div>${opts(t.needs,'need')}</div><div></div></div>`;break;
+case 'game':h=`<div class="screen"><div class="top">${header('game')}<div class="q"><p class="eyebrow">${t.gameE}</p><h1>${t.gameT}</h1><p class="body">${t.gameB}</p></div><div class="glass game"><small id="rd" style="color:var(--t4);font-size:14px">${t.round(1)}</small><div class="tap" id="tap">${t.waitBlue}</div></div></div>
+<div class="bottom"><p class="left">${t.gameLeft}</p><button class="btn" id="gst">${t.start}</button><button class="link" id="gskip">${t.skip}</button></div></div>`;app.innerHTML=h;runGame();return;
+case 'gres':{const rt=S.rt||[298,341,305,290,326],avg=Math.round(rt.reduce((a,b)=>a+b,0)/rt.length),mx=Math.max(...rt);
+h=`<div class="screen"><div class="top">${header('gres')}<div class="q"><p class="eyebrow">${t.resE}</p><h1>${t.resT2(avg)}</h1><p class="body">${t.resB}</p></div>
+<div class="glass" style="display:flex;flex-direction:column;gap:10px"><div class="vbars">${rt.map((v,i)=>`<div><span>${v}</span><i data-h="${Math.round(130*v/mx)}"></i><span style="color:var(--t4)">${i+1}</span></div>`).join('')}</div><div class="rows" style="border-top:1px solid rgba(255,255,255,.08)"><div class="row"><span>${t.avg}</span><em style="color:var(--lblue)">${avg} ms</em></div></div></div></div>
+<div class="bottom"><p class="left">${t.resLeft}</p><button class="btn" onclick="next('gres')">${t.cont}</button></div></div>`;
+app.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.vbars i').forEach(i=>i.style.height=i.dataset.h+'px')));return}
+case 'wk':h=`<div class="screen"><div class="top">${header('wk')}<div class="q"><h1>${t.wkQ}</h1><p class="sub">${t.wkS}</p></div>${opts(t.wks,'weekend')}</div><div></div></div>`;break;
+case 'shift':{const w=S.wake??420,k=S.weekend??1,add=[0,90,180,null][k],we=add===null?null:w+add;
+const title=k===0?t.shiftT0:k===3?t.shiftTv:t.shiftT(dur(add)),body=k===0?t.shiftB0:k===3?t.shiftBv:t.shiftB(fmt(w),fmt(we));
+const lx=70,cw=(350-lx)/7,y0=34,yw=k===3?null:y0+(add/180)*70;const ys=k===3?[y0+40,y0+80]:[yw,yw];
+const dots=t.days.map((d,i)=>{const cx=lx+cw*i+cw/2,wkd=i>=5,cy=wkd?ys[i-5]:y0;return `<circle cx="${cx}" cy="${cy}" r="7" fill="${wkd?'#4876EE':'#A2C4FF'}"/><text x="${cx}" y="142" fill="${wkd?'#FAFAFA':'#8F8F8F'}" font-size="13" text-anchor="middle">${d}</text>`}).join('');
+const lines=[[y0,fmtShort(w)]].concat(k===0||k===3?[]:[[yw,fmtShort(we)]]).map(([y,l])=>`<line x1="${lx}" x2="350" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.08)"/><text x="0" y="${y+4}" fill="#8F8F8F" font-size="12">${l}</text>`).join('');
+h=`<div class="screen"><div class="top">${header('shift')}<div class="q"><p class="eyebrow">${t.shiftE}</p><h1>${title}</h1><p class="body">${body}</p></div>
+<div class="glass" style="display:flex;flex-direction:column;gap:6px"><div class="chart"><svg viewBox="0 0 350 150" class="fadeup">${lines}${dots}</svg></div><div class="rows" style="border-top:1px solid rgba(255,255,255,.08)"><div class="row"><span>${t.wdWake}</span><em>${fmt(w)}</em></div><div class="row"><span>${t.weWake}</span><em>${we===null?t.varies:fmt(we)}</em></div></div></div></div>
+<div class="bottom"><p class="left">${leftText('shift')}</p><button class="btn" onclick="next('shift')">${t.cont}</button></div></div>`;break}
+case 'caff':h=`<div class="screen"><div class="top">${header('caff')}<div class="q"><h1>${t.caffQ}</h1><p class="sub">${t.caffS}</p></div>${opts(t.caffs,'caff')}</div><div></div></div>`;break;
+case 'cres':{const c=S.caff??2;let card='',title,body;
+if(c===4){title=t.cafT0;body=t.cafB0}else{const cup=[660,780,900,1020][c],bed=S.bed??60,hrs=((bed-cup+1440)%1440)/60,pb=Math.round(100*Math.pow(.5,hrs/5)),c5=cup+300;title=t.cafT(fmtShort(cup),fmtShort(c5));body=t.cafB;
+const cols=[[t.cafCup(fmtShort(cup)),100,1],[fmtShort(c5),50,.6],[t.cafBed(fmtShort(bed)),pb,.35]];
+card=`<div class="glass" style="display:flex;flex-direction:column;gap:10px"><div class="vbars">${cols.map(([l,p,o])=>`<div><span style="color:var(--t1);font-size:15px">${p}%</span><i data-h="${Math.max(4,Math.round(120*p/100))}" style="max-width:56px;opacity:${o}"></i><span>${l}</span></div>`).join('')}</div><small style="color:var(--t4);font-size:13px;border-top:1px solid rgba(255,255,255,.08);padding-top:10px">${t.cafNote}</small></div>`}
+h=`<div class="screen"><div class="top">${header('cres')}<div class="q"><p class="eyebrow">${t.cafE}</p><h1>${title}</h1><p class="body">${body}</p></div>${card}</div>
+<div class="bottom"><p class="left">${leftText('cres')}</p><button class="btn" onclick="next('cres')">${t.cont}</button></div></div>`;
+app.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.vbars i').forEach(i=>i.style.height=i.dataset.h+'px')));return}
+case 'tried':h=`<div class="screen"><div class="top">${header('tried')}<div class="q"><h1>${t.triedQ}</h1><p class="sub">${t.triedS}</p></div>${opts(t.trieds,'tried',{multi:true})}</div><div class="bottom"><button class="btn" id="cont" ${(S.tried||[]).length?'':'disabled'} onclick="next('tried')">${t.cont}</button></div></div>`;break;
+case 'diff':{const tr=(S.tried||[]).filter(i=>i<5),x=tr.slice(0,2).map(i=>t.triedShort[i]).join(lang==='en'?' and ':', ');
+h=`<div class="screen"><div class="top">${header('diff')}<div class="q"><p class="eyebrow">${t.diffE}</p><h1>${tr.length?t.diffT:t.diffT0}</h1><p class="body">${tr.length?t.diffB(x):t.diffB0}</p></div>${CMP(t)}</div>
+<div class="bottom"><p class="left">${leftText('diff')}</p><button class="btn" onclick="next('diff')">${t.cont}</button></div></div>`;
+app.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h+'px')));return}
+case 'rev':{const pc=S.pain===undefined||S.pain===5?t.painChip[5]:t.painChip[S.pain],p=S.pain===undefined||S.pain===5?t.none:t.pains[S.pain];
+h=`<div class="screen"><div class="top">${header('rev')}<div class="q"><p class="eyebrow">${t.revE}</p><h1>${t.revT(pc)}</h1></div>
+<div class="glass" style="display:flex;flex-direction:column;gap:12px;padding:24px"><div class="stars">★★★★★</div><p style="font-size:18px">“${t.revs[S.pain??5][0]}”</p><small style="color:var(--t4)">${t.revs[S.pain??5][1]}</small><small style="color:var(--t5);font-size:12px">${t.revNote}</small></div></div>
+<div class="bottom"><p class="left">${leftText('rev')}</p><button class="btn" onclick="next('rev')">${t.cont}</button></div></div>`;break}
+case 'name':h=`<div class="screen"><div class="top">${header('name')}<div class="q"><h1>${t.nameQ}</h1><p class="sub">${t.nameS}</p></div><input class="input" id="nm" maxlength="30" placeholder="${t.namePh}" value="${esc(S.name||'')}"></div><div class="bottom"><button class="btn" id="cont" disabled>${t.cont}</button></div></div>`;
+app.innerHTML=h;{const nm=app.querySelector('#nm'),cb=app.querySelector('#cont');const v=()=>{cb.disabled=!nm.value.trim()};nm.oninput=v;v();cb.onclick=()=>{S.name=nm.value.trim();next('name')}}return;
+case 'prof':{const c=clockInfo(),k=S.weekend??1,add=[0,90,180,null][k],debt=debtMin(),rt=S.rt||[298,341,305,290,326],avg=Math.round(rt.reduce((a,b)=>a+b,0)/rt.length);
+const tr0=typeRow(t);const R=[[t.pClock,t.typeShort[c.ty],'#A2C4FF'],...(tr0?[tr0]:[]),[t.pMorn,t.morns[S.morn??1],'#FFC982'],[t.pSleep,dur(sleepMin()),'#A2C4FF'],[t.pDebt,debt>0?dur(debt):'0','#4876EE'],[t.pShift,k===0?t.none0:add===null?t.varies:dur(add),'#4876EE'],[t.pCaff,S.caff===4?t.none0:t.caffs[S.caff??2],'#FFC982']];
+h=`<div class="screen"><div class="top">${header('prof')}<div class="q"><p class="eyebrow">${t.profE}</p><h1>${t.profT(S.name?esc(S.name):'')}</h1><p class="body">${t.profB}</p></div>
+<div class="glass" style="padding:8px 20px"><div class="rows">${R.map(([a,b,d],i)=>`<div class="row u" style="--i:${i}"><i style="width:8px;height:8px;border-radius:50%;background:${d}"></i><span>${a}</span><em>${b}</em></div>`).join('')}</div></div></div>
+<div class="bottom"><p class="left">${leftText('prof')}</p><button class="btn" onclick="next('prof')">${t.cont}</button></div></div>`;break}
+case 'week':{const rows=t.weekRows(t.moods[S.mood??1],fmt(S.wake??420));
+h=`<div class="screen"><div class="top"><div class="q"><p class="eyebrow">${t.weekE}</p><h1>${t.weekT}</h1></div>
+<div class="glass timeline">${rows.map(([a,b],i)=>`<div class="st u" style="--i:${i}"><i style="${i===0?'background:var(--blue);box-shadow:0 0 10px rgba(72,118,238,.6)':''}"></i><div><small>${a}</small><p>${b}</p></div></div>`).join('')}</div></div>
+<div class="bottom"><p class="left">${t.weekLeft}</p><button class="btn" onclick="next('week')">${t.seeOptions}</button></div></div>`;break}
+case 'lwhat':h=qScreen('lwhat','lwhat',t.lwhatQ,t.lwhatS,t.lwhats,true);break;
+case 'ldelay':h=qScreen('ldelay','ldelay',t.ldelayQ,t.ldelayS,t.ldelays);break;
+case 'drift':{const dl=[20,45,90,150][S.ldelay??2],act=m24((S.bed??60)+lat()),plan=m24(act-dl),wh=(S.lwhat||[]).filter(i=>i>=0);
+const nx=v=>{let x=v<720?v+1440:v;return 10+Math.min(330,Math.max(0,(x-1260)/420*330))};const xp=nx(plan),xa=nx(act);
+const card=`<div class="glass" style="display:flex;flex-direction:column;gap:8px"><div class="chart"><svg viewBox="0 0 350 110" class="fadeup"><rect x="10" y="57" width="330" height="6" rx="3" fill="rgba(255,255,255,.1)"/><rect x="${xp}" y="57" width="${Math.max(2,xa-xp)}" height="6" rx="3" fill="url(#dg)"/><defs><linearGradient id="dg" x1="0" x2="1"><stop stop-color="#A2C4FF"/><stop offset="1" stop-color="#4876EE"/></linearGradient></defs><text x="${(xp+xa)/2}" y="40" fill="#FAFAFA" font-size="15" text-anchor="middle">+${dur(dl)}</text><circle cx="${xp}" cy="60" r="8" fill="#A2C4FF"/><circle cx="${xa}" cy="60" r="8" fill="#4876EE"/><text x="${xp+6}" y="92" fill="#A2C4FF" font-size="13" text-anchor="end">${fmtShort(plan)}</text><text x="${xa-6}" y="92" fill="#FAFAFA" font-size="13" text-anchor="start">${fmtShort(act)}</text></svg></div>
+<div class="rows" style="border-top:1px solid rgba(255,255,255,.08)"><div class="row"><i style="width:8px;height:8px;border-radius:50%;background:#A2C4FF"></i><span>${t.planned}</span><em>${fmt(plan)}</em></div><div class="row"><i style="width:8px;height:8px;border-radius:50%;background:#4876EE"></i><span>${t.actual}</span><em>${fmt(act)}</em></div><div class="row"><span>${t.lostWeek}</span><em style="color:var(--lblue)">${dur(dl*5)}</em></div></div></div>`;
+h=iScreen('drift',t.driftE,t.driftT(fmt(plan),fmt(act)),wh.length?t.driftB(dur(dl*5),t.lwhatShort[wh[0]]):t.driftB0(dur(dl*5)),card);break}
+case 'wakeN':h=qScreen('wakeN','wakeN',t.wakeNQ,t.wakeNS,t.wakeNs);break;
+case 'awake':h=qScreen('awake','awake',t.awakeQ,t.awakeS,t.awakes);break;
+case 'night':{const n=nightInfo(),W=330,lw=Math.max(4,n.latm/n.inBed*W);let ticks='';for(let i=1;i<=n.w;i++){const x=10+lw+(i/(n.w+1))*(W-lw);ticks+=`<rect x="${x-3}" y="38" width="6" height="24" rx="3" fill="#FAFAFA" opacity=".85"/>`}
+const card=`<div class="glass" style="display:flex;flex-direction:column;gap:10px"><div class="chart"><svg viewBox="0 0 350 100" class="fadeup"><defs><linearGradient id="ng" x1="0" x2="1"><stop stop-color="#4876EE"/><stop offset="1" stop-color="#A2C4FF"/></linearGradient></defs><rect x="10" y="40" width="${W}" height="20" rx="10" fill="url(#ng)"/><rect x="10" y="40" width="${lw}" height="20" rx="10" fill="#646464"/>${ticks}<text x="10" y="86" fill="#8F8F8F" font-size="13">${fmtShort(S.bed??60)}</text><text x="340" y="86" fill="#8F8F8F" font-size="13" text-anchor="end">${fmtShort(S.wake??420)}</text></svg></div>
+<div class="legend"><span><i style="background:#646464;height:8px;width:8px;border-radius:50%"></i>${t.fallingAsleep}</span><span><i style="background:#FAFAFA;height:8px;width:8px;border-radius:50%"></i>${t.wokeUp}</span></div>
+<div class="rows" style="border-top:1px solid rgba(255,255,255,.08)"><div class="row"><span>${t.inBed}</span><em>${dur(n.inBed)}</em></div><div class="row"><span>${t.pEff}</span><em style="color:var(--lblue)">${n.eff}%</em></div></div></div>`;
+h=iScreen('night',t.nightE,t.nightT(dur(n.inBed),dur(n.asleep)),t.nightB(t.fallShort[S.fall??1],t.wakeNShort[S.wakeN??1],n.eff)+((S.awake===0||S.awake===1)?' '+t.nightPhone:''),card);break}
+case 'sound':{const focus=S.pain===3?t.focusMind(t.mindShort[(S.mind||[0])[0]]):t.focusSleep;
+const bars=Array.from({length:28},(_,i)=>`<i style="--i:${i};height:${30+((i*37)%55)}%"></i>`).join('');
+const card=`<div class="glass" style="display:flex;flex-direction:column;gap:14px"><div class="eq">${bars}</div><div class="rows" style="border-top:1px solid rgba(255,255,255,.08)"><div class="row"><span>${t.soundFor}</span><em style="color:var(--lblue)">${focus}</em></div><div class="row"><span>${t.soundAll}</span><em>${t.soundAllV}</em></div></div></div>`;
+h=iScreen('sound',t.soundE,t.soundT,t.soundB(focus),card);break}
+case 'snore':h=qScreen('snore','snore',t.snoreQ,t.snoreS,t.snores);break;
+case 'gap':{const daily=Math.max(0,needHours()*60-sleepMin()),cum=[1,2,3,4,5].map(k=>daily*k),mx=Math.max(1,cum[4]);
+const card=daily?`<div class="glass" style="display:flex;flex-direction:column;gap:10px"><div class="vbars">${cum.map((v,i)=>`<div><span style="color:${i===4?'var(--t1)':'var(--t3)'}">${dur(v)}</span><i data-h="${Math.max(6,Math.round(130*v/mx))}"></i><span style="color:var(--t4)">${t.days5[i]}</span></div>`).join('')}</div></div>`:'';
+h=iScreen('gap',t.gapE,daily?t.gapT(dur(daily*5)):t.gapT0,t.gapB+((S.morn===2||S.morn===3)?' '+t.gapMorn(t.morns[S.morn]):''),card);app.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll('.vbars i').forEach(i=>i.style.height=i.dataset.h+'px')));return}
+case 'mind':h=qScreen('mind','mind',t.mindQ,t.mindS,t.minds,true);break;
+case 'mfreq':h=qScreen('mfreq','mfreq',t.mfreqQ,t.mfreqS,t.mfreqs);break;
+case 'loop':{const mi=(S.mind||[0]),mtxt=mi.includes(4)?t.mindShort[4]:mi.slice(0,2).map(i=>t.mindShort[i]).join(lang==='en'?' and ':', ');
+const steps=[t.loop1(lang==='en'?mtxt.charAt(0).toUpperCase()+mtxt.slice(1):mtxt),t.loop2(t.fallShort[S.fall??1]),t.loop3(dur(sleepMin())),t.loop4];
+const card=`<div class="glass loop">${steps.map((x,i)=>`<div class="lstep u" style="--i:${i}"><span class="num">${i+1}</span><p>${x}</p></div>`).join('')}<div class="lback">↩ ${t.loopBack}</div></div>`;
+h=iScreen('loop',t.loopE,t.loopT,t.loopB(t.mfreqShort[S.mfreq??2]),card);break}
+case 'spread':h=qScreen('spread','spread',t.spreadQ,t.spreadS,t.spreads);break;
+case 'swork':h=qScreen('swork','swork',t.sworkQ,t.sworkS,t.sworks);break;
+case 'weekv':{const sp=[30,60,120,180][S.spread??2],base=m24((S.bed??60)+lat()),o=[0,.3,.15,.55,.1,1,.8],lx=70,cw=(350-lx)/7,yv=v=>22+v*96;
+const dots=t.days.map((d,i)=>{const cx=lx+cw*i+cw/2,we=i>=5;return `<circle cx="${cx}" cy="${yv(o[i])}" r="7" fill="${we?'#4876EE':'#A2C4FF'}"/><text x="${cx}" y="148" fill="${we?'#FAFAFA':'#8F8F8F'}" font-size="13" text-anchor="middle">${d}</text>`}).join('');
+const card=`<div class="glass" style="display:flex;flex-direction:column;gap:6px"><div class="chart"><svg viewBox="0 0 350 155" class="fadeup"><line x1="${lx}" x2="350" y1="22" y2="22" stroke="rgba(255,255,255,.08)"/><line x1="${lx}" x2="350" y1="118" y2="118" stroke="rgba(255,255,255,.08)"/><text x="0" y="26" fill="#8F8F8F" font-size="12">${fmtShort(base)}</text><text x="0" y="122" fill="#8F8F8F" font-size="12">${fmtShort(m24(base+sp))}</text>${dots}</svg></div></div>`;
+h=iScreen('weekv',t.weekvE,t.weekvT(dur(sp)),(S.swork??0)>0?t.weekvB1:t.weekvB0,card);break}
+case 'mood':h=`<div class="screen"><div class="top">${header('mood')}<div class="q"><h1>${t.moodQ}</h1><p class="sub">${t.moodS}</p></div>${opts(t.moods,'mood')}</div><div></div></div>`;break;
+case 'loading':h=`<div class="screen"><div class="top">${header('loading')}<div style="display:flex;flex-direction:column;align-items:center;gap:16px"><div class="ring"><svg width="168" height="168"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#A2C4FF"/><stop offset="1" stop-color="#4876EE"/></linearGradient></defs><circle cx="84" cy="84" r="76" stroke="#25262A" stroke-width="8" fill="none"/><circle id="arc" cx="84" cy="84" r="76" stroke="url(#rg)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="477.5" stroke-dashoffset="477.5"/></svg><b id="pct">0%</b></div><p style="font-size:22px">${t.loadT}</p></div><div class="glass steps">${t.steps.map(s=>`<div class="step"><i></i>${s}</div>`).join('')}</div></div><div></div></div>`;app.innerHTML=h;runLoading();return;
+case 'email':h=`<div class="screen"><div class="top">${header('email')}<div class="q"><h1 style="font-size:30px">${t.emailT}</h1><p class="sub">${t.emailS}</p></div><input class="input" id="em" type="email" placeholder="${t.emailPh}" value="${S.email||''}"><label class="check"><input type="checkbox">${t.optin}</label></div><div class="bottom"><button class="btn" id="cont" disabled>${t.seePlan}</button><p class="note">${t.never}</p></div></div>`;app.innerHTML=h;const em=app.querySelector('#em'),cb=app.querySelector('#cont');const v=()=>{cb.disabled=!/.+@.+\..+/.test(em.value)};em.oninput=v;v();cb.onclick=()=>{S.email=em.value;next('email')};return;
+case 'result':{const today=pathFrom(todayPts()),tom=pathFrom(tomorrowPts()),pc=S.pain===undefined||S.pain===5?t.painChip[5]:t.painChip[S.pain],debt=debtMin();
+h=`<div class="screen"><div class="top"><span class="pill" style="color:var(--lblue)">${t.built(pc)}</span><h1 style="font-size:34px">${LONG&&S.name?t.resTn(esc(S.name)):t.resT}</h1>
+<div class="glass" style="display:flex;flex-direction:column;gap:10px" id="rc"><p style="font-size:18px">${t.fcT}</p><div class="legend"><span><i style="background:#646464"></i>${t.today}</span><span><i style="background:#A2C4FF"></i>${t.tomorrow}</span></div>
+<div class="chart"><svg viewBox="0 0 350 180"><defs><linearGradient id="s2" x1="0" x2="350" gradientUnits="userSpaceOnUse"><stop stop-color="#FFC982"/><stop offset=".5" stop-color="#A2C4FF"/><stop offset="1" stop-color="#4876EE"/></linearGradient><linearGradient id="a2" x1="0" y1="20" x2="0" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><path d="${today}" stroke="#646464" stroke-width="2" stroke-dasharray="4 4" fill="none"/><path class="fadein" d="${tom} L350 180 L0 180Z" fill="url(#a2)"/><path class="draw" id="curve2" d="${tom}" stroke="url(#s2)" stroke-width="3" fill="none" stroke-linecap="round"/><circle class="fadein" cx="60" cy="28" r="6" fill="#FFC982"/></svg></div><div class="axis">${t.axis.map(a=>`<span>${a}</span>`).join('')}</div>
+<div class="rows" style="border-top:1px solid rgba(255,255,255,.08);margin-top:4px"><div class="row"><span>${t.sharp}</span><em class="blur">${fmt(m24((S.wake??420)+160))}</em>${LOCK}</div><div class="row"><span>${t.slumpTo}</span><em class="blur">${fmt(m24((S.wake??420)+570))}</em>${LOCK}</div></div></div>
+<div class="stats"><div><small>${t.debt}</small><p>${debt>0?dur(debt):'0'}</p></div><div><small>${t.fall}</small><p>${t.fallShort[S.fall??2]}</p></div></div>
+<div class="glass"><p style="font-size:18px;padding-bottom:4px">${t.planT}</p><div class="rows"><div class="row"><span>${t.bestSleep}</span><em class="blur">${fmt(bestSleep())}</em>${LOCK}</div><div class="row"><span>${t.sound(t.moods[S.mood??1])}</span><em class="blur">${t.ready}</em>${LOCK}</div><div class="row"><span>${t.caffeine}</span><em class="blur">${fmt(m24(bestSleep()-600))}</em>${LOCK}</div><div class="row"><span>${t.sleepNow}</span><em class="blur">+18%</em>${LOCK}</div><div class="row"><span>${t.tmr(fmt(S.wake??420))}</span><em style="color:var(--lblue)">${t.firstFc}</em></div>${LONG&&S.need!==undefined?`<div class="row"><span>${t.plannedFor}</span><em style="color:var(--lblue)">${t.needs[S.need]}</em></div>`:''}${LONG&&S.snore===0?`<div class="row"><span>${t.snoreRow}</span><em style="color:var(--lblue)">${t.on}</em></div>`:''}</div></div>
+<div class="glass" style="display:flex;flex-direction:column;gap:8px"><p style="font-size:32px;color:var(--lblue);line-height:.8">“</p><p class="review">${t.revs[S.pain??5][0]}</p><small style="color:var(--t4)">${t.revs[S.pain??5][1]}</small></div>
+<button class="btn" onclick="next('result')">${t.unlock}</button><p class="disc">${t.disc}</p></div></div>`;
+app.innerHTML=h;prepDraw();return}
+case 'paywall':h=`<div class="screen" style="justify-content:flex-start"><div class="top"><div class="header"><button class="back x" onclick="exitModal()">${X}</button></div><div class="q"><h1 style="font-size:30px">${t.payT}</h1><p class="sub">${t.payS}</p></div>
+<div style="display:flex;flex-direction:column;gap:12px"><div class="plan on" data-p="y"><div class="hd">${t.yearly}<span class="save">${t.save}</span><i class="r"></i></div><div class="price"><b>$5.00</b><span>${t.perMo}</span></div><div style="display:flex;gap:8px;font-size:15px"><span class="strike">$155.88</span><span style="color:var(--t2)">${t.billed}</span></div><p style="font-size:14px;color:var(--lblue)">${t.trial}</p></div>
+<div class="plan small" data-p="m"><div class="hd">${t.monthly}</div><span style="color:var(--t2)">${t.moPrice}</span><i class="r" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--t5);margin-left:8px"></i></div></div>
+<div class="glass"><p style="font-size:18px;padding-bottom:8px">${t.get}</p>${t.benefits.map(b=>`<div class="benefit"><i></i><span>${b}</span></div>`).join('')}</div>
+<div class="glass" style="padding:8px 20px"><div class="rows"><div class="row"><span>${t.tl1[0]}</span><em style="color:var(--lblue);font-size:15px">${t.tl1[1]}</em></div><div class="row"><span>${t.tl2[0]}</span><em style="font-size:15px;color:var(--t2)">${t.tl2[1]}</em></div></div></div>
+<button class="btn" onclick="next('paywall')">${t.startTrial}</button><p class="disc">${t.noCharge}</p></div></div>`;app.innerHTML=h;app.querySelectorAll('.plan').forEach(p=>p.onclick=()=>{app.querySelectorAll('.plan').forEach(q=>q.classList.toggle('on',q===p));const r=app.querySelector('.plan.small .r');r.style.background=p.dataset.p==='m'?'var(--blue)':'';r.style.borderColor=p.dataset.p==='m'?'var(--blue)':''});return;
+case 'download':{const e=S.email||'you@email.com',sp=Array.from({length:10},(_,i)=>{const a=i/10*Math.PI*2+.3,r=70+(i%2)*8;return `<i style="--x:${(Math.cos(a)*r).toFixed(0)}px;--y:${(Math.sin(a)*r).toFixed(0)}px;--d:${(i%5)*.12}s;background:${['#A2C4FF','#FFC982','#4876EE','#FAFAFA'][i%4]};width:${i%3===0?6:4}px;height:${i%3===0?6:4}px"></i>`}).join('');
+h=`<div class="screen celebrate"><div class="top"><div class="header"></div>
+<div class="hero"><div class="badgebox"><span class="ring o"></span><span class="ring i"></span><div class="badge"><svg width="44" height="44" viewBox="0 0 44 44" fill="none"><path class="tick" d="M12 23l7 7 14-15" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+<span class="pill trial"><b></b>${t.trialOn}</span><h1 style="font-size:34px;text-align:center">${t.celebT}</h1><p class="sub" style="text-align:center">${t.celebS}</p></div>
+<div class="glass unlocked"><p style="font-size:18px;padding-bottom:4px;display:flex;gap:8px;align-items:center"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="2" fill="#A2C4FF"/><path d="M5.5 7V5a2.5 2.5 0 015-.6" stroke="#A2C4FF" stroke-width="1.5" stroke-linecap="round"/></svg>${t.unlockedT}</p><div class="rows">
+<div class="row u" style="--i:0"><span>${t.bestSleep}</span><em>${fmt(bestSleep())}</em></div>
+<div class="row u" style="--i:1"><span>${t.sound(t.moods[S.mood??1])}</span><em style="color:var(--lblue)">${t.ready}</em></div>
+<div class="row u" style="--i:2"><span>${t.caffeine}</span><em>${fmt(m24(bestSleep()-600))}</em></div>
+<div class="row u" style="--i:3"><span>${t.tmr(fmt(S.wake??420))}</span><em style="color:var(--sun)">${t.firstFc}</em></div></div></div>
+<div class="stepper"><i class="dash d1"></i><i class="dash d2"></i>${t.stepsShort.map((x,i)=>`<div><span class="num">${i+1}</span><p>${x}</p></div>`).join('')}</div></div>
+<div class="bottom"><a class="btn store" href="https://apps.apple.com/us/app/renight-ai-sleep-sounds/id1619362440" target="_blank" rel="noopener"><svg width="18" height="22" viewBox="0 0 17 20" fill="#fff"><path d="M14.1 10.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1zM11.6 3c.7-.9 1.2-2 1-3.2-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3.1 1.1.1 2.2-.6 2.9-1.4z"/></svg>${t.getApp}</a><p class="note">${t.savedTo(e)}</p></div></div>`;break}}
+app.innerHTML=h;bindScreen();}
+function bindScreen(){const auto={pain:'pain',snooze:'snooze',low:'low',me:'me',fall:'fall',mood:'mood',free:'free',morn:'morn',need:'need',wk:'weekend',caff:'caff',ldelay:'ldelay',wakeN:'wakeN',awake:'awake',snore:'snore',mfreq:'mfreq',spread:'spread',swork:'swork'};
+ if(auto[cur]){const id=cur;bindSingle(auto[cur],()=>next(id))}
+ if(cur==='pain'){app.querySelector('#none').onclick=()=>{S.pain=5;next('pain')}}
+ if(cur==='age'){const box=app.querySelector('.opts[data-key="age"]');box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;S.age=i;box.querySelectorAll('.opt').forEach(o=>o.classList.toggle('on',o===b));const emp=app.querySelector('#emp'),btn=app.querySelector('#cont');if(i===0){emp.innerHTML='';btn.style.visibility='hidden';box.classList.add('locked');setTimeout(()=>go('teen'),600);return}emp.innerHTML=`<div class="empathy"><p>${L().emp[i-1]}</p><small>${L().src}</small></div>`;btn.style.visibility='visible'});if(S.age>0)box.querySelector(`.opt[data-i="${S.age}"]`).click()}
+ if(cur==='wakes')bindMulti('wakes');
+ if(cur==='goal')bindMulti('goal',-1);
+ if(cur==='lwhat')bindMulti('lwhat',-1);
+ if(cur==='mind')bindMulti('mind',4);
+ if(cur==='tried')bindMulti('tried',5);}
+function qScreen(id,key,q,sub,list,multi){return `<div class="screen"><div class="top">${header(id)}<div class="q"><h1>${q}</h1><p class="sub">${sub}</p></div>${opts(list,key,{multi:!!multi})}</div>${multi?`<div class="bottom"><button class="btn" id="cont" ${(S[key]||[]).length?'':'disabled'} onclick="next('${id}')">${L().cont}</button></div>`:'<div></div>'}</div>`}
+function iScreen(id,eyebrow,title,body,card){return `<div class="screen"><div class="top">${header(id)}<div class="q"><p class="eyebrow">${eyebrow}</p><h1>${title}</h1>${body?`<p class="body">${body}</p>`:''}</div>${card}</div><div class="bottom"><p class="left">${leftText(id)}</p><button class="btn" onclick="next('${id}')">${L().cont}</button></div></div>`}
+function leftText(id){if(!LONG)return '';const i=ORDER.indexOf(id),e=ORDER.indexOf('email');let n=0;for(let j=i+1;j<e;j++)if(QIDS.has(ORDER[j]))n++;return L().qLeft(n)}
+function nightInfo(){const inBed=Math.max(30,((S.wake??420)-(S.bed??60)+1440)%1440),latm=[5,15,30,45][S.fall??1],w=[0,1,2,4][S.wakeN??1],asleep=Math.max(0,inBed-latm-w*15);return {inBed,latm,w,asleep,eff:Math.round(asleep/inBed*100)}}
+function typeRow(t){if(!LONG)return null;const p=S.pain;if(p===0&&S.ldelay!==undefined)return [t.pDrift,t.perNight(dur([20,45,90,150][S.ldelay])),'#4876EE'];if(p===1&&S.wakeN!==undefined)return [t.pEff,nightInfo().eff+'%','#A2C4FF'];if(p===3&&S.mfreq!==undefined)return [t.pMind,t.mfreqs[S.mfreq],'#4876EE'];if(p===4&&S.spread!==undefined)return [t.pSpread,dur([30,60,120,180][S.spread]),'#4876EE'];return null}
+function goalText(){const g=(S.goal||[])[0];return g===undefined?L().goalShort[0]:L().goalShort[g]}
+function clockInfo(){const fw=[390,450,510,570,630][S.free??2],ty=fw<420?0:fw<540?1:2,g=fw-(S.wake??420),pos=Math.min(1,Math.max(0,(fw-360)/300));return {fw,ty,g,pos}}
+function CMP(t){return `<div class="glass cmp"><div><div class="barbox"><div class="bar" style="background:${LONG?'rgba(143,143,143,.55)':'var(--inner)'}" data-h="36"></div></div><p>${t.own}</p><small>${t.ownD}</small></div><div><div class="barbox"><div class="bar" style="background:linear-gradient(#A2C4FF,#4876EE)" data-h="96"></div></div><p>${t.withR}</p><small>${t.withD}</small></div></div>`}
+function runGame(){const t=L(),tap=app.querySelector('#tap'),rd=app.querySelector('#rd'),btn=app.querySelector('#gst'),sk=app.querySelector('#gskip');let round=0,times=[],t0=0,timer=null,state='idle';
+ const arm=()=>{if(cur!=='game')return;state='wait';tap.className='tap';tap.textContent=t.waitBlue;rd.textContent=t.round(round+1);timer=setTimeout(()=>{if(cur!=='game')return;state='go';tap.className='tap go';tap.textContent=t.tapNow;t0=performance.now()},1000+Math.random()*1800)};
+ btn.onclick=()=>{btn.style.visibility='hidden';round=0;times=[];arm()};
+ sk.onclick=()=>{clearTimeout(timer);S.rt=S.rt||[298,341,305,290,326];next('game')};
+ tap.onpointerdown=()=>{if(state==='wait'){clearTimeout(timer);state='early';tap.className='tap';tap.textContent=t.tooSoon;setTimeout(arm,900)}else if(state==='go'){const ms=Math.round(performance.now()-t0);times.push(ms);state='done';tap.className='tap';tap.textContent=ms+' ms';round++;if(round>=5){S.rt=times;setTimeout(()=>{if(cur==='game')next('game')},800)}else setTimeout(arm,700)}}}
+function runLoading(){const arc=app.querySelector('#arc'),pct=app.querySelector('#pct'),steps=[...app.querySelectorAll('.step')],C=477.5;let p=0;const set=v=>{p=v;arc.style.strokeDashoffset=C*(1-v/100);pct.textContent=Math.round(v)+'%';steps.forEach((s,i)=>s.classList.toggle('done',v>=[25,50,75,100][i]))};
+ const anim=(from,to,ms,cb)=>{const t0=performance.now();const f=now=>{if(cur!=='loading')return;const k=Math.min(1,(now-t0)/ms);set(from+(to-from)*(1-Math.pow(1-k,2)));k<1?requestAnimationFrame(f):cb&&cb()};requestAnimationFrame(f)};
+ anim(0,85,2600,()=>{dim.classList.add('on');const sh=document.createElement('div');sh.className='sheet';const sk=LONG?(S.snore===undefined?'snore':'nap'):'weekend';sh.innerHTML=`<p class="sub" style="font-size:14px">${L().sheetE}</p><h3>${sk==='snore'?L().snoreQ:sk==='nap'?L().napQ:L().sheetQ}</h3>${opts(sk==='snore'?L().snores:sk==='nap'?L().naps:L().weekends,sk)}`;document.body.appendChild(sh);requestAnimationFrame(()=>sh.classList.add('on'));
+  sh.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{S[sk]=+b.dataset.i;sh.querySelectorAll('.opt').forEach(o=>o.classList.toggle('on',o===b));sh.querySelector('.opts').classList.add('locked');setTimeout(()=>{sh.classList.remove('on');dim.classList.remove('on');setTimeout(()=>sh.remove(),400);anim(85,100,900,()=>setTimeout(()=>{if(cur==='loading')next('loading')},600))},600)})})}
+function exitModal(){dim.classList.add('on');const m=document.createElement('div');m.className='modal';const t=L();m.innerHTML=`<h1 style="font-size:24px">${t.exitT}</h1><p class="body">${t.exitB}</p><button class="btn" id="keep">${t.keep}</button><button class="link" id="leave">${t.leave}</button>`;document.body.appendChild(m);requestAnimationFrame(()=>m.classList.add('on'));m.querySelector('#keep').onclick=()=>{m.classList.remove('on');dim.classList.remove('on');setTimeout(()=>m.remove(),300)};m.querySelector('#leave').onclick=restart}
+function restart(){for(const k in S)delete S[k];hist=[];go('start',false)}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;closeOverlays();render()});
+document.querySelectorAll('.vt button').forEach(b=>{b.onclick=()=>{const u=new URL(location.href);if(b.dataset.v==='long')u.searchParams.set('ver','long');else u.searchParams.delete('ver');u.searchParams.set('lang',lang);u.hash='';location.href=u.toString()}});
+if(location.hash){const h=location.hash.slice(1);if(ORDER.includes(h)||h==='teen')cur=h}
+render();
+</script>
+</body>
+</html>
