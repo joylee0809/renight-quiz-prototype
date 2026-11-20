@@ -683,6 +683,8 @@ const langNow = () => { try { return lang } catch (e) { return PAGE } };
 const when = ts => { const d = ts?.toDate ? ts.toDate() : new Date(); return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}` };
 const say = (m, ms = 3200) => { toast.textContent = m; toast.style.display = "block"; clearTimeout(say.t); say.t = setTimeout(() => toast.style.display = "none", ms) };
 const LANGN = {en: "EN", ko: "한국어", ja: "日本語"};
+const VN = {start: "V01", pain: "V02", age: "V03", goal: "V04", guess: "V05", wake: "V06", free: "V07", clock: "V08", snooze: "V09", morn: "V10", asleep: "V11", qr1: "V12", qr2: "V13", qr3: "V14", late: "V15", low: "V16", me: "V17", b1: "V18", need: "V19", fall: "V20", wakes: "V21", caff: "V22", cres: "V23", b2: "V24", tried: "V25", diff: "V26", rev: "V27", mood: "V28", name: "V29", prof: "V30", loading: "V31", email: "V32", result: "V33", week: "V34", paywall: "V35", pay: "V35d", done: "V36", teen: "V03x", android: "V35a"};
+const scr = id => VN[id] || id;
 
 function drawBar() {
   if (!me) { bar.innerHTML = `<button id="rv-login" title="코멘트(조이, 데이빗, 헤이즐만)">💬 코멘트</button>`; $("#rv-login").onclick = login; return }
@@ -729,7 +731,7 @@ catcher.addEventListener("click", ev => {
   const r = phone.getBoundingClientRect(); const x = (ev.clientX - r.left) / phone.clientWidth, y = ev.clientY - r.top;
   closePop(); draft = {x, y}; drawPins(); document.body.classList.remove("rv-mode"); drawBar();
   const pop = document.createElement("div"); pop.className = "rv-pop";
-  pop.innerHTML = `<div class="rv-msgs"><div class="rv-msg"><b>${E(who(me.email)[0])}</b><time>${LANGN[langNow()] || ""} · ${E(screenNow())}</time></div></div><textarea placeholder="여기에 코멘트를 적어 주세요"></textarea><div class="rv-acts"><button data-a="x">취소</button><button class="pri" data-a="ok">등록</button></div>`;
+  pop.innerHTML = `<div class="rv-msgs"><div class="rv-msg"><b>${E(who(me.email)[0])}</b><time>${LANGN[langNow()] || ""} ${E(scr(screenNow()))}</time></div></div><textarea placeholder="여기에 코멘트를 적어 주세요"></textarea><div class="rv-acts"><button data-a="x">취소</button><button class="pri" data-a="ok">등록</button></div>`;
   layer.appendChild(pop); placePop(pop, x, y); const ta = pop.querySelector("textarea"); ta.focus();
   const send = async () => { const text = ta.value.trim(); if (!text) return; pop.querySelector('[data-a=ok]').disabled = true;
     try { const ref = await addDoc(collection(db, "comments"), {screen: screenNow(), lang: langNow(), page: PAGE, ctx: location.search, x, y: Math.round(y), text, author: me.email, created: serverTimestamp(), resolved: false, parent: null}); draft = null; pop.remove(); openId = ref.id }
@@ -769,7 +771,7 @@ function drawList() {
   for (const c of rs) {
     const n = all.filter(r => r.parent === c.id).length; const [nm, col] = who(c.author);
     const b = document.createElement("button"); b.className = "rv-item" + (c.resolved ? " done" : "");
-    b.innerHTML = `<small><span class="rv-dot" style="background:${col}"></span>${E(nm)} · ${E(LANGN[c.lang] || c.lang)} · ${E(c.screen)} #${numOf(c)} · ${when(c.created)}${n ? ` · 답글 ${n}` : ""}${c.resolved ? " · 해결됨" : ""}</small><span>${E(c.text)}</span>`;
+    b.innerHTML = `<small><span class="rv-dot" style="background:${col}"></span>${E(nm)}, ${E(LANGN[c.lang] || c.lang)}, ${E(scr(c.screen))} 핀 ${numOf(c)}, ${when(c.created)}${n ? `, 답글 ${n}` : ""}${c.resolved ? ", 해결됨" : ""}</small><span>${E(c.text)}</span>`;
     b.onclick = () => goTo(c); list.appendChild(b);
   }
 }
