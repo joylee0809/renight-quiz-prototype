@@ -622,6 +622,164 @@ if (location.hash) { const hh = location.hash.slice(1); if (ORDER.includes(hh) |
 render();
 
 </script>
+<!-- 리뷰 코멘트(피그마처럼 화면에 핀). build_v5.py 가 페이지 맨 끝에 붙인다. 저장: Firebase renight-quiz-review / Firestore comments. 쓰기와 읽기는 아래 3명만(규칙: ../코멘트/firestore.rules). -->
+<style>
+#rv-bar{position:fixed;right:16px;bottom:16px;z-index:1000;display:flex;gap:6px;align-items:center;font-family:"Pretendard","Plus Jakarta Sans",system-ui,sans-serif}
+#rv-bar button{height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(29,30,33,.92);color:#FAFAFA;font:inherit;font-size:14px;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);white-space:nowrap}
+#rv-bar button.on{background:#4876EE;border-color:#4876EE}
+#rv-bar .rv-me{width:40px;padding:0;font-weight:600}
+#rv-layer{position:absolute;inset:0;z-index:50;pointer-events:none}
+#rv-catch{position:absolute;inset:0;z-index:60;cursor:crosshair;display:none;background:rgba(72,118,238,.06);outline:2px dashed rgba(162,196,255,.6);outline-offset:-2px}
+body.rv-mode #rv-catch{display:block}
+.rv-pin{position:absolute;width:30px;height:30px;margin:-30px 0 0 0;border-radius:50% 50% 50% 4px;color:#fff;font:600 13px/30px "Pretendard",system-ui,sans-serif;text-align:center;pointer-events:auto;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);border:2px solid #fff;z-index:70}
+.rv-pin.done{opacity:.45}
+.rv-pop{position:absolute;z-index:80;width:290px;max-width:calc(100% - 16px);background:#FAFAFA;color:#1D1E21;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.45);pointer-events:auto;font:14px/1.45 "Pretendard",system-ui,sans-serif;overflow:hidden}
+.rv-pop .rv-msgs{max-height:260px;overflow:auto;padding:12px 14px 4px}
+.rv-msg{margin-bottom:10px}.rv-msg b{font-weight:600}.rv-msg time{color:#8F8F8F;font-size:12px;margin-left:6px}.rv-msg p{margin:2px 0 0;white-space:pre-wrap;word-break:break-word}
+.rv-msg .rv-x{float:right;border:0;background:none;color:#A5A5A5;cursor:pointer;font-size:12px}
+.rv-pop textarea{display:block;width:calc(100% - 28px);margin:0 14px;min-height:64px;border:1px solid #D9D9D9;border-radius:10px;padding:8px;font:inherit;resize:vertical;color:#1D1E21;background:#fff}
+.rv-acts{display:flex;gap:6px;justify-content:flex-end;padding:10px 14px 12px;flex-wrap:wrap}
+.rv-acts button{height:32px;padding:0 12px;border-radius:999px;border:1px solid #D9D9D9;background:#fff;color:#1D1E21;font:inherit;font-size:13px;cursor:pointer}
+.rv-acts button.pri{background:#4876EE;border-color:#4876EE;color:#fff}
+.rv-acts .rv-left{margin-right:auto}
+#rv-panel{position:fixed;top:0;right:0;bottom:0;width:340px;max-width:92vw;z-index:1001;background:#FAFAFA;color:#1D1E21;box-shadow:-8px 0 30px rgba(0,0,0,.4);transform:translateX(105%);transition:transform .25s;font:14px/1.45 "Pretendard",system-ui,sans-serif;display:flex;flex-direction:column}
+#rv-panel.on{transform:none}
+#rv-panel header{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid #E5E5E5}
+#rv-panel header h3{margin:0;font-size:16px;font-weight:600;margin-right:auto}
+#rv-panel header button,#rv-panel .rv-filter button{border:1px solid #D9D9D9;background:#fff;border-radius:999px;height:30px;padding:0 10px;font:inherit;font-size:13px;cursor:pointer;color:#1D1E21}
+#rv-panel .rv-filter{display:flex;gap:6px;padding:10px 16px}
+#rv-panel .rv-filter button.on{background:#1D1E21;color:#fff;border-color:#1D1E21}
+#rv-list{overflow:auto;flex:1;padding:0 8px 16px}
+.rv-item{display:block;width:100%;text-align:left;border:0;background:none;padding:10px 8px;border-radius:10px;cursor:pointer;font:inherit;color:inherit}
+.rv-item:hover{background:#EFEFEF}.rv-item.done{opacity:.5}
+.rv-item small{display:block;color:#8F8F8F;font-size:12px}
+.rv-item span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rv-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+#rv-toast{position:fixed;left:50%;bottom:72px;transform:translateX(-50%);z-index:1002;background:#1D1E21;color:#FAFAFA;padding:10px 16px;border-radius:12px;font:14px/1.4 "Pretendard",system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.4);display:none;max-width:90vw;text-align:center}
+</style>
+<div id="rv-bar"><button id="rv-login" title="코멘트(조이, 데이빗, 헤이즐만)">💬 코멘트</button></div>
+<div id="rv-panel"><header><h3>코멘트</h3><button id="rv-close">닫기</button></header><div class="rv-filter"><button data-f="open" class="on">열린 것</button><button data-f="all">전체</button><button data-f="here">이 화면</button></div><div id="rv-list"></div></div>
+<div id="rv-toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const fb = initializeApp({apiKey: "AIzaSyBBEQhcdbhAKUlW4bZpKR6SNjgji_ZIxKg", authDomain: "renight-quiz-review.firebaseapp.com", projectId: "renight-quiz-review", storageBucket: "renight-quiz-review.firebasestorage.app", messagingSenderId: "724556658560", appId: "1:724556658560:web:05af597f06e0e054c8b365"});
+const auth = getAuth(fb), db = getFirestore(fb);
+const PAGE = "en";
+const PEOPLE = {"joy@munice.com": ["조이", "#4876EE"], "david@munice.com": ["데이빗", "#2FA36B"], "hazel@munice.com": ["헤이즐", "#E0823D"]};
+const $ = s => document.querySelector(s);
+const phone = $("#phone"), appEl = $("#app"), bar = $("#rv-bar"), panel = $("#rv-panel"), list = $("#rv-list"), toast = $("#rv-toast");
+const layer = document.createElement("div"); layer.id = "rv-layer";
+const catcher = document.createElement("div"); catcher.id = "rv-catch";
+phone.appendChild(layer); phone.appendChild(catcher);
+let me = null, all = [], unsub = null, openId = null, filter = "open", draft = null;
+
+const E = x => String(x ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const who = e => (PEOPLE[e] || [e.split("@")[0], "#646464"]);
+const screenNow = () => { try { return cur } catch (e) { return "start" } };
+const langNow = () => { try { return lang } catch (e) { return PAGE } };
+const when = ts => { const d = ts?.toDate ? ts.toDate() : new Date(); return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}` };
+const say = (m, ms = 3200) => { toast.textContent = m; toast.style.display = "block"; clearTimeout(say.t); say.t = setTimeout(() => toast.style.display = "none", ms) };
+const LANGN = {en: "EN", ko: "한국어", ja: "日本語"};
+
+function drawBar() {
+  if (!me) { bar.innerHTML = `<button id="rv-login" title="코멘트(조이, 데이빗, 헤이즐만)">💬 코멘트</button>`; $("#rv-login").onclick = login; return }
+  const [nm, col] = who(me.email); const open = all.filter(c => !c.parent && !c.resolved).length;
+  bar.innerHTML = `<button id="rv-mode">${document.body.classList.contains("rv-mode") ? "핀 꽂는 중 (취소)" : "📍 코멘트 남기기"}</button><button id="rv-open">목록 ${open}</button><button class="rv-me" id="rv-me" title="${E(me.email)} 로그아웃" style="background:${col};border-color:${col}">${E(nm[0])}</button>`;
+  if (document.body.classList.contains("rv-mode")) $("#rv-mode").classList.add("on");
+  $("#rv-mode").onclick = () => { document.body.classList.toggle("rv-mode"); closePop(); drawBar() };
+  $("#rv-open").onclick = () => { panel.classList.add("on"); drawList() };
+  $("#rv-me").onclick = async () => { if (confirm(`${me.email} 에서 로그아웃할까요?`)) await signOut(auth) };
+}
+
+async function login() {
+  const p = new GoogleAuthProvider(); p.setCustomParameters({hd: "munice.com", prompt: "select_account"});
+  try { await signInWithPopup(auth, p) }
+  catch (e) { if (/popup-blocked|operation-not-supported/.test(e.code || "")) await signInWithRedirect(auth, p); else if (!/popup-closed|cancelled-popup/.test(e.code || "")) say("로그인하지 못했어요: " + (e.code || e.message)) }
+}
+getRedirectResult(auth).catch(() => {});
+
+onAuthStateChanged(auth, u => {
+  if (unsub) { unsub(); unsub = null }
+  if (u && !PEOPLE[(u.email || "").toLowerCase()]) { say("코멘트는 조이, 데이빗, 헤이즐 계정만 쓸 수 있어요."); signOut(auth); return }
+  me = u; all = []; document.body.classList.remove("rv-mode");
+  if (me) {
+    unsub = onSnapshot(collection(db, "comments"), s => { all = s.docs.map(d => ({id: d.id, ...d.data()})); drawPins(); drawBar(); if (panel.classList.contains("on")) drawList(); if (openId) showPop(openId, true) }, e => say("코멘트를 불러오지 못했어요: " + e.code));
+  } else { closePop(); layer.innerHTML = "" }
+  drawBar();
+});
+
+function roots() { return all.filter(c => !c.parent).sort((a, b) => (a.created?.seconds || 9e9) - (b.created?.seconds || 9e9)) }
+function numOf(c) { return roots().filter(r => r.screen === c.screen && r.lang === c.lang).indexOf(c) + 1 }
+function drawPins() {
+  layer.innerHTML = ""; if (!me) return;
+  const W = phone.clientWidth;
+  for (const c of roots().filter(c => c.screen === screenNow() && c.lang === langNow())) {
+    const el = document.createElement("div"); el.className = "rv-pin" + (c.resolved ? " done" : ""); el.style.left = Math.round(c.x * W) + "px"; el.style.top = Math.round(c.y) + "px"; el.style.background = who(c.author)[1]; el.textContent = numOf(c); el.title = who(c.author)[0] + ": " + c.text;
+    el.onclick = ev => { ev.stopPropagation(); showPop(c.id) }; layer.appendChild(el);
+  }
+  if (draft) { const el = document.createElement("div"); el.className = "rv-pin"; el.style.left = Math.round(draft.x * W) + "px"; el.style.top = draft.y + "px"; el.style.background = who(me.email)[1]; el.textContent = "+"; layer.appendChild(el) }
+}
+function placePop(pop, x, y) { const W = phone.clientWidth; pop.style.left = Math.max(8, Math.min(W - pop.offsetWidth - 8, x * W + 18)) + "px"; pop.style.top = Math.max(8, y - 10) + "px" }
+function closePop() { document.querySelectorAll(".rv-pop").forEach(p => p.remove()); openId = null; if (draft) { draft = null; drawPins() } }
+
+catcher.addEventListener("click", ev => {
+  const r = phone.getBoundingClientRect(); const x = (ev.clientX - r.left) / phone.clientWidth, y = ev.clientY - r.top;
+  closePop(); draft = {x, y}; drawPins(); document.body.classList.remove("rv-mode"); drawBar();
+  const pop = document.createElement("div"); pop.className = "rv-pop";
+  pop.innerHTML = `<div class="rv-msgs"><div class="rv-msg"><b>${E(who(me.email)[0])}</b><time>${LANGN[langNow()] || ""} · ${E(screenNow())}</time></div></div><textarea placeholder="여기에 코멘트를 적어 주세요"></textarea><div class="rv-acts"><button data-a="x">취소</button><button class="pri" data-a="ok">등록</button></div>`;
+  layer.appendChild(pop); placePop(pop, x, y); const ta = pop.querySelector("textarea"); ta.focus();
+  const send = async () => { const text = ta.value.trim(); if (!text) return; pop.querySelector('[data-a=ok]').disabled = true;
+    try { const ref = await addDoc(collection(db, "comments"), {screen: screenNow(), lang: langNow(), page: PAGE, ctx: location.search, x, y: Math.round(y), text, author: me.email, created: serverTimestamp(), resolved: false, parent: null}); draft = null; pop.remove(); openId = ref.id }
+    catch (e) { say("등록하지 못했어요: " + e.code); pop.querySelector('[data-a=ok]').disabled = false } };
+  pop.querySelector('[data-a=ok]').onclick = send; pop.querySelector('[data-a=x]').onclick = closePop;
+  ta.onkeydown = e => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) send(); if (e.key === "Escape") closePop() };
+});
+
+function showPop(id, refresh) {
+  const c = all.find(x => x.id === id); if (!c) { closePop(); return }
+  const keep = refresh ? document.querySelector(".rv-pop textarea")?.value : "";
+  document.querySelectorAll(".rv-pop").forEach(p => p.remove()); openId = id;
+  const reps = all.filter(r => r.parent === id).sort((a, b) => (a.created?.seconds || 9e9) - (b.created?.seconds || 9e9));
+  const msg = m => `<div class="rv-msg">${m.author === me.email ? `<button class="rv-x" data-del="${m.id}">지우기</button>` : ""}<b style="color:${who(m.author)[1]}">${E(who(m.author)[0])}</b><time>${when(m.created)}</time><p>${E(m.text)}</p></div>`;
+  const pop = document.createElement("div"); pop.className = "rv-pop";
+  pop.innerHTML = `<div class="rv-msgs">${[c, ...reps].map(msg).join("")}</div><textarea placeholder="답글">${E(keep || "")}</textarea><div class="rv-acts"><button class="rv-left" data-a="res">${c.resolved ? "다시 열기" : "✓ 해결"}</button><button data-a="x">닫기</button><button class="pri" data-a="rep">답글</button></div>`;
+  layer.appendChild(pop); placePop(pop, c.x, c.y);
+  const ta = pop.querySelector("textarea");
+  const rep = async () => { const text = ta.value.trim(); if (!text) return; ta.value = ""; try { await addDoc(collection(db, "comments"), {parent: id, screen: c.screen, lang: c.lang, page: PAGE, text, author: me.email, created: serverTimestamp()}) } catch (e) { say("답글을 달지 못했어요: " + e.code) } };
+  pop.querySelector('[data-a=rep]').onclick = rep; ta.onkeydown = e => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) rep(); if (e.key === "Escape") closePop() };
+  pop.querySelector('[data-a=x]').onclick = closePop;
+  pop.querySelector('[data-a=res]').onclick = () => updateDoc(doc(db, "comments", id), {resolved: !c.resolved, resolvedBy: me.email}).catch(e => say(e.code));
+  pop.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => { if (!confirm("이 코멘트를 지울까요?")) return; const did = b.dataset.del; if (did === id) for (const r of reps) await deleteDoc(doc(db, "comments", r.id)).catch(() => {}); await deleteDoc(doc(db, "comments", did)).catch(e => say(e.code)); if (did === id) closePop() });
+}
+
+function goTo(c) {
+  panel.classList.remove("on");
+  const doGo = () => { try { if (typeof go === "function" && screenNow() !== c.screen) go(c.screen) } catch (e) {} setTimeout(() => { drawPins(); showPop(c.id); const top = phone.getBoundingClientRect().top + window.scrollY + c.y - 160; window.scrollTo({top: Math.max(0, top), behavior: "smooth"}) }, 80) };
+  if (c.lang && c.lang !== langNow()) { const b = document.querySelector(`.lang button[data-l="${c.lang}"]`); if (b) b.click() }
+  doGo();
+}
+function drawList() {
+  let rs = roots().slice().reverse();
+  if (filter === "open") rs = rs.filter(c => !c.resolved);
+  if (filter === "here") rs = rs.filter(c => c.screen === screenNow() && c.lang === langNow());
+  list.innerHTML = rs.length ? "" : `<p style="padding:16px;color:#8F8F8F">코멘트가 없어요.</p>`;
+  for (const c of rs) {
+    const n = all.filter(r => r.parent === c.id).length; const [nm, col] = who(c.author);
+    const b = document.createElement("button"); b.className = "rv-item" + (c.resolved ? " done" : "");
+    b.innerHTML = `<small><span class="rv-dot" style="background:${col}"></span>${E(nm)} · ${E(LANGN[c.lang] || c.lang)} · ${E(c.screen)} #${numOf(c)} · ${when(c.created)}${n ? ` · 답글 ${n}` : ""}${c.resolved ? " · 해결됨" : ""}</small><span>${E(c.text)}</span>`;
+    b.onclick = () => goTo(c); list.appendChild(b);
+  }
+}
+$("#rv-close").onclick = () => panel.classList.remove("on");
+panel.querySelectorAll(".rv-filter button").forEach(b => b.onclick = () => { filter = b.dataset.f; panel.querySelectorAll(".rv-filter button").forEach(x => x.classList.toggle("on", x === b)); drawList() });
+new MutationObserver(() => { if (openId && !all.some(c => c.id === openId && c.screen === screenNow())) { document.querySelectorAll(".rv-pop").forEach(p => p.remove()); openId = null } draft = null; drawPins() }).observe(appEl, {childList: true});
+window.addEventListener("resize", drawPins);
+document.addEventListener("keydown", e => { if (e.key === "Escape") { document.body.classList.remove("rv-mode"); if (me) drawBar() } });
+drawBar();
+</script>
 
 </body>
 </html>
